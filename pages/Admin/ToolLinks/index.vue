@@ -13,7 +13,7 @@
                 </v-list-item-icon>
                 <v-list-item-content>
                   <v-list-item-title>
-                    <nuxt-link :to="'toollinks/' + item.name">
+                    <nuxt-link :to="`toollinks/${item.name}?catid=${item.ID}`">
                       {{ item.name }}
                     </nuxt-link>
                   </v-list-item-title>
