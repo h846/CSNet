@@ -1,13 +1,16 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
+  router: {
+    base: process.env.NODE_ENV === 'dev' ? '/' : '/CSNet_dev/test/'
+  }, 
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - nuxt-csnet',
-    title: 'nuxt-csnet',
+    title: 'CS-Net',
     htmlAttrs: {
       lang: 'en'
     },
