@@ -20,7 +20,7 @@
 
             <v-list-item-action style="width: 90%">
               <v-row align="center" justify="space-around">
-                <v-btn color="error" large>削除</v-btn>
+                <v-btn color="error" large @click="delCat()">削除</v-btn>
                 <v-btn @click.stop="closeDialog" color="primary" large
                   >閉じる</v-btn
                 >
@@ -28,21 +28,59 @@
             </v-list-item-action>
           </v-list-item-group>
         </v-list>
+        <!-- snack bar -->
+        <v-snackbar v-model="snackbar" :timeout="snackbarTO">
+          <p>
+            カテゴリの中にアイテムがあります。<br />アイテムを削除してからカテゴリを削除してください<br />
+            <strong>{{ snackbarMsg }}</strong>
+          </p>
+        </v-snackbar>
       </v-card>
     </v-dialog>
   </section>
 </template>
 <script>
+import axios from "axios";
+
 export default {
   props: ["catlist", "dialog"],
   data() {
     return {
       selected: [],
+      snackbar: false,
+      snackbarMsg: "",
+      snackbarTO: 2000,
     };
   },
   methods: {
     closeDialog() {
       this.$emit("closeDialog");
+    },
+    delCat() {
+      for (const itemID of this.selected) {
+        axios
+          .get(
+            "http://lejnet/API/accdb?db=CSNet/dataCenter/DB/Tool/tools_home.mdb&table=tool"
+          )
+          .then((res) => {
+            //カテゴリの中にアイテムがないか確認
+            let valid = res.data.some((val) => val.category == itemID);
+            //カテゴリにアイテムがなかったら削除
+            if (valid == false) {
+              // ここから
+              console.log("it will be deleted!!");
+            } else {
+              //カテゴリにアイテムがあった場合
+              let cat = this.catlist.find((elm) => {
+                console.log(elm.ID);
+                return elm.ID == itemID;
+              });
+
+              this.snackbarMsg = cat.name;
+              this.snackbar = true;
+            }
+          });
+      }
     },
   },
   created() {
