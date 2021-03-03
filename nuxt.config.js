@@ -2,8 +2,9 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   router: {
-    base: process.env.NODE_ENV === 'dev' ? '/' : '/CSNet_dev/test/'
-  }, 
+    //パスの設定。本番環境で動かすのに必要
+    base: process.env.NODE_ENV === 'development' ? '/' : '/CSNet_dev/test/'
+  },
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
 

@@ -29,11 +29,9 @@
           </v-list-item-group>
         </v-list>
         <!-- snack bar -->
-        <v-snackbar v-model="snackbar" :timeout="snackbarTO">
-          <p>
-            カテゴリの中にアイテムがあります。<br />アイテムを削除してからカテゴリを削除してください<br />
-            <strong>{{ snackbarMsg }}</strong>
-          </p>
+        <v-snackbar v-model="snackbar">
+          <span style="white-space: pre">{{ snackbarMsg }}</span>
+          <v-btn @click="snackbar = false" color="pink" text>CLOSE</v-btn>
         </v-snackbar>
       </v-card>
     </v-dialog>
@@ -49,7 +47,6 @@ export default {
       selected: [],
       snackbar: false,
       snackbarMsg: "",
-      snackbarTO: 2000,
     };
   },
   methods: {
@@ -57,6 +54,12 @@ export default {
       this.$emit("closeDialog");
     },
     delCat() {
+      if (this.selected.length < 1) {
+        this.snackbarMsg = "一つ以上選択してください";
+        this.snackbar = true;
+        return;
+      }
+
       for (const itemID of this.selected) {
         axios
           .get(
@@ -67,7 +70,8 @@ export default {
             let valid = res.data.some((val) => val.category == itemID);
             //カテゴリにアイテムがなかったら削除
             if (valid == false) {
-              // ここから
+              let sql = "";
+              dasda;
               console.log("it will be deleted!!");
             } else {
               //カテゴリにアイテムがあった場合
@@ -76,7 +80,10 @@ export default {
                 return elm.ID == itemID;
               });
 
-              this.snackbarMsg = cat.name;
+              this.snackbarMsg = `
+                - ${cat.name} -
+                カテゴリの中にアイテムがあります。
+                アイテムを削除してからカテゴリを削除してください`;
               this.snackbar = true;
             }
           });
@@ -91,3 +98,4 @@ export default {
   },
 };
 </script>
+<style lang="stylus" scoped></style>
