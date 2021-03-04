@@ -30,7 +30,7 @@
         </v-list>
         <!-- snack bar -->
         <v-snackbar v-model="snackbar">
-          <span style="white-space: pre">{{ snackbarMsg }}</span>
+          <p style="white-space: pre">{{ snackbarMsg }}</p>
           <v-btn @click="snackbar = false" color="pink" text>CLOSE</v-btn>
         </v-snackbar>
       </v-card>
@@ -52,6 +52,9 @@ export default {
   methods: {
     closeDialog() {
       this.$emit("closeDialog");
+    }, // Reload
+    reset: function () {
+      this.$router.go({ path: this.$router.currentRoute.path, force: true });
     },
     delCat() {
       if (this.selected.length < 1) {
@@ -70,21 +73,32 @@ export default {
             let valid = res.data.some((val) => val.category == itemID);
             //カテゴリにアイテムがなかったら削除
             if (valid == false) {
-              let sql = "";
-              dasda;
-              console.log("it will be deleted!!");
+              let data = {
+                sql: `DELETE FROM category WHERE ID=${itemID}`,
+                db: "CSNet/dataCenter/DB/Tool/tools_home.mdb",
+              };
+              axios
+                .post("http://lejnet/API/accdb", data)
+                .then((res) => {
+                  console.log(res.data);
+                  this.reset();
+                  this.snackbarMsg = "カテゴリを削除しました";
+                  this.snackbar = true;
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
             } else {
               //カテゴリにアイテムがあった場合
               let cat = this.catlist.find((elm) => {
-                console.log(elm.ID);
                 return elm.ID == itemID;
               });
 
-              this.snackbarMsg = `
-                - ${cat.name} -
-                カテゴリの中にアイテムがあります。
-                アイテムを削除してからカテゴリを削除してください`;
+              this.snackbarMsg = `- ${cat.name} -
+このカテゴリの中にアイテムがあります。
+アイテムを削除してからカテゴリを削除してください`;
               this.snackbar = true;
+              return;
             }
           });
       }

@@ -22,7 +22,7 @@
 
               <v-divider></v-divider>
 
-              <v-list-item>
+              <v-list-item @click.stop="addDialog = true">
                 <v-list-item-icon>
                   <v-icon class="deep-orange--text"
                     >mdi-plus-circle-outline</v-icon
@@ -52,6 +52,7 @@
         </v-card>
       </v-col>
     </v-row>
+    <CatAddDialog :addDialog="addDialog" @closeAddDialog="addDialog = false" />
     <LinkListDialog
       :catlist="category"
       :dialog="dialog"
@@ -61,17 +62,20 @@
 </template>
 <script>
 import axios from "axios";
+import CatAddDialog from "@/components/Admin/CatAddDialog";
 import LinkListDialog from "@/components/Admin/LinkListDialog";
 
 export default {
   components: {
     LinkListDialog,
+    CatAddDialog,
   },
   data() {
     return {
       category: [],
       links: [],
       dialog: false,
+      addDialog: false,
     };
   },
   methods: {
@@ -81,10 +85,12 @@ export default {
     axios
       .all([
         axios.get(
-          "http://lejnet/API/accdb?db=CSNet/dataCenter/DB/Tool/tools_home.mdb&table=category"
+          "http://lejnet/API/accdb?db=CSNet/dataCenter/DB/Tool/tools_home.mdb&table=category" +
+            `&date=${new Date().getTime()}` //同じURLだとキャッシュされてまうため、パラメータに現時刻を無駄に追加してキャッシュ無効化
         ),
         axios.get(
-          "http://lejnet/API/accdb?db=CSNet/dataCenter/DB/Tool/tools_home.mdb&table=tool"
+          "http://lejnet/API/accdb?db=CSNet/dataCenter/DB/Tool/tools_home.mdb&table=tool" +
+            `&date=${new Date().getTime()}`
         ),
       ])
       .then(
