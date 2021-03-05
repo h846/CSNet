@@ -17,17 +17,13 @@
                 ></v-checkbox>
               </v-list-item-title>
             </v-list-item>
-
-            <v-list-item-action style="width: 90%">
-              <v-row align="center" justify="space-around">
-                <v-btn color="error" large @click="delCat()">削除</v-btn>
-                <v-btn @click.stop="closeDialog" color="primary" large
-                  >閉じる</v-btn
-                >
-              </v-row>
-            </v-list-item-action>
           </v-list-item-group>
         </v-list>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn color="error" @click="delCat()">削除</v-btn>
+          <v-btn color="primary" @click.stop="closeDialog">閉じる</v-btn>
+        </v-card-actions>
         <!-- snack bar -->
         <v-snackbar v-model="snackbar">
           <p style="white-space: pre">{{ snackbarMsg }}</p>

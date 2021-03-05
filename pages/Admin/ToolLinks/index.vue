@@ -52,7 +52,11 @@
         </v-card>
       </v-col>
     </v-row>
-    <CatAddDialog :addDialog="addDialog" @closeAddDialog="addDialog = false" />
+    <CatAddDialog
+      :catlist="category"
+      :addDialog="addDialog"
+      @closeAddDialog="addDialog = false"
+    />
     <LinkListDialog
       :catlist="category"
       :dialog="dialog"
@@ -86,7 +90,7 @@ export default {
       .all([
         axios.get(
           "http://lejnet/API/accdb?db=CSNet/dataCenter/DB/Tool/tools_home.mdb&table=category" +
-            `&date=${new Date().getTime()}` //同じURLだとキャッシュされてまうため、パラメータに現時刻を無駄に追加してキャッシュ無効化
+            `&date=${new Date().getTime()}` //同じURLだとキャッシュされてまうため、パラメータに現時刻を無駄に追加してキャッシュを無効化してん
         ),
         axios.get(
           "http://lejnet/API/accdb?db=CSNet/dataCenter/DB/Tool/tools_home.mdb&table=tool" +
