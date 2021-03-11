@@ -35,23 +35,12 @@
         </v-row>
       </li>
     </ul>
-    <!--Del Dialog -->
-    <v-dialog v-model="delDialog" width="320">
-      <v-card>
-        <v-card-title>
-          選択した項目を削除します。<br />
-          よろしいですか？
-        </v-card-title>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" outlined @click="deleteItem"> 削除 </v-btn>
-          <v-btn color="error" outlined @click="delDialog = false">
-            キャンセル
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <!-- Delete Dialog -->
+    <itemDelDialog
+      :dialog="delDialog"
+      :checkedItems="checkedItems"
+      @closeDelDialog="delDialog = false"
+    />
     <!-- Add Dialog-->
     <itemAddDialog
       :dialog="addDialog"
@@ -61,11 +50,14 @@
   </v-container>
 </template>
 <script>
-import itemAddDialog from "@/components/Admin/ItemAddDailog";
+import itemAddDialog from "@/components/Admin/ItemAddDialog";
+import itemDelDialog from "@/components/Admin/ItemDelDialog";
+
 import axios from "axios";
 export default {
   components: {
     itemAddDialog,
+    itemDelDialog,
   },
   data() {
     return {
@@ -104,29 +96,6 @@ export default {
       } else {
         this.btnDisable = false;
       }
-    },
-  },
-  methods: {
-    addItem: function () {},
-    deleteItem: function () {
-      for (let id of this.checkedItems) {
-        let data = {
-          sql: `DELETE FROM tool WHERE ID=${id}`,
-          db: "CSNet/dataCenter/DB/Tool/tools_home.mdb",
-        };
-        axios
-          .post("http://lejnet/API/accdb", data)
-          .then((res) => {
-            console.log(res.data, "success");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-      this.reset();
-    },
-    reset: function () {
-      this.$router.go({ path: this.$router.currentRoute.path, force: true });
     },
   },
 };

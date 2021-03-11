@@ -17,7 +17,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer />
-        <v-btn color="success" @click="isExistCategory">カテゴリ追加</v-btn>
+        <v-btn color="success" @click="addCategory">カテゴリ追加</v-btn>
         <v-btn @click.stop="closeDialog">キャンセル</v-btn>
       </v-card-actions>
     </v-card>
@@ -44,7 +44,7 @@ export default {
     closeDialog() {
       this.$emit("closeAddDialog");
     },
-    isExistCategory: function () {
+    addCategory: function () {
       if (!this.catname) {
         this.errorMsg = "何か文字を入力してください";
         this.error = true;
@@ -56,7 +56,7 @@ export default {
         console.log("All Pass!!");
         //ID生成
         let isIDExist = true;
-        //重複チェック
+        //ID重複チェック
         while (isIDExist) {
           var ID = this.randNum();
           isIDExist = this.catlist.some((val) => val.ID == ID);
