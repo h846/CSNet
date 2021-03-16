@@ -139,7 +139,10 @@ export default {
   created() {
     axios
       .all([
-        axios.get("http://lejnet/API/src/json/csnet-announce.json"),
+        axios.get(
+          "http://lejnet/API/src/json/csnet-announce.json?date=" +
+            new Date().getTime()
+        ),
         axios.get(
           "http://lejnet/API/accdb?db=CSNet/common/HotVoice/data/DB/data.mdb&table=good_comment_csnethome"
         ),

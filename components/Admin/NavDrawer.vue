@@ -2,7 +2,7 @@
   <v-navigation-drawer app permanent>
     <v-sheet color="grey lighten-4" class="pa-4">
       <h1>CS-Net Admin Page</h1>
-      <div>ようこそ{{ user.name }}さん</div>
+      <div>ようこそ、{{ userinfo.name }}さん</div>
     </v-sheet>
 
     <v-divider></v-divider>
@@ -25,9 +25,9 @@
 
 <script>
 export default {
+  props: ["userinfo"],
   data() {
     return {
-      user: {},
       links: [
         ["mdi-message-bulleted", "全体周知編集", "/Admin"],
         ["mdi-hammer-screwdriver", "ツールリンク編集", "/Admin/toollinks"],

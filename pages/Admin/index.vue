@@ -70,7 +70,10 @@ export default {
   methods: {
     getAnnounceData: async function () {
       await axios
-        .get("http://lejnet/API/src/json/csnet-announce.json")
+        .get(
+          "http://lejnet/API/src/json/csnet-announce.json?date=" +
+            new Date().getTime()
+        )
         .then((res) => {
           this.announce = res.data.data[0].text;
           this.content = this.announce;

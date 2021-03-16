@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavDrawer />
+    <NavDrawer :userinfo="userinfo" />
     <nuxt-child />
   </div>
 </template>
@@ -15,6 +15,16 @@ export default {
   },
 
   data: () => ({}),
+
+  computed: {
+    userinfo: function () {
+      return this.$store.state.userData;
+    },
+  },
+
+  mounted() {
+    this.$store.dispatch("getUserData");
+  },
 };
 </script>
 <style lang="stylus" scoped></style>
