@@ -10,7 +10,7 @@
     <v-list>
       <v-list-item v-for="[icon, name, url] in links" :key="icon" link>
         <v-list-item-icon>
-          <v-icon>{{ icon }}</v-icon>
+          <v-icon color="primary">{{ icon }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -46,6 +46,7 @@ export default {
     };
   },
   methods: {
+    //リンクが外部か内部かによって振り分け
     transPage(name, url) {
       if (name == "CS-Netメール" || name == "ユーザー設定") {
         window.open(url, "_blank");

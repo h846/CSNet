@@ -14,7 +14,21 @@ export default {
     NavDrawer,
   },
 
-  data: () => ({}),
+  data: () => ({
+    admins: [
+      "sehara",
+      "hkinjo",
+      "mtanaka",
+      "myabe",
+      "kiwaoka",
+      "aishii",
+      "myamagu",
+      "hokobaya",
+      "mtakaha",
+      "hyashir",
+      "",
+    ],
+  }),
 
   computed: {
     userinfo: function () {
@@ -24,6 +38,11 @@ export default {
 
   mounted() {
     this.$store.dispatch("getUserData");
+    let userID = this.$store.state.userData.id;
+    let isAdmin = this.admins.some((val) => val == userID);
+    if (!isAdmin) {
+      this.$router.replace("/");
+    }
   },
 };
 </script>

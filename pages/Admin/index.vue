@@ -1,28 +1,25 @@
 <template>
   <v-container class="py-8 px-6" fluid>
-    <v-row>
-      <v-col cols="6">
-        <h1>現在のメッセージ</h1>
-        <div style="margin-bottom: 80px"></div>
-        <v-sheet min-height="330" rounded style="padding: 10px">
-          <div class="prv" v-html="announce"></div>
-        </v-sheet>
-      </v-col>
-      <v-col cols="6">
-        <h1>編集エリア</h1>
-        <client-only placeholder="Loading Your Editor...">
-          <vue-editor v-model="content" />
-          <v-btn
-            class="mt-3"
-            block
-            :loading="loading"
-            color="primary"
-            @click="dialog = true"
-            >投 稿</v-btn
-          >
-        </client-only>
-      </v-col>
-    </v-row>
+    <!--tool bar -->
+    <v-toolbar dense elevation="1" class="mb-3">
+      <v-toolbar-title>周知メッセージ編集エリア</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn color="primary" outlined>現在のメッセージ</v-btn>
+    </v-toolbar>
+    <client-only placeholder="Loading Your Editor...">
+      <v-sheet>
+        <vue-editor v-model="content" />
+      </v-sheet>
+      <v-btn
+        class="mt-3"
+        block
+        :loading="loading"
+        color="primary"
+        @click="dialog = true"
+        >投 稿</v-btn
+      >
+    </client-only>
+
     <!--Comfirmation Dialog -->
     <v-dialog v-model="dialog" persistent max-width="500">
       <v-card>

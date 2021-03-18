@@ -4,7 +4,7 @@
 
     <v-spacer></v-spacer>
 
-    <nuxt-link to="Admin">ADMIN PAGE</nuxt-link>
+    <v-btn to="Admin" nuxt color="yellow lighten-4" outlined>ADMIN</v-btn>
   </v-app-bar>
 </template>
 <style lang="stylus" scoped>

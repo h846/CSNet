@@ -1,5 +1,6 @@
 <template>
-  <section>
+  <section class="bg">
+    <Loader :loading="loading" />
     <AppBar />
     <v-container>
       <v-row>
@@ -16,7 +17,7 @@
         </v-col>
         <!-- Hot Voice-->
         <v-col cols="4">
-          <v-sheet>
+          <v-sheet class="transparent">
             <v-card min-width="344" outlined>
               <v-card-title class="mb-5">
                 <span class="title-label">本日のグッドコメント</span>
@@ -89,6 +90,7 @@
   </section>
 </template>
 <script>
+import Loader from "@/components/loader";
 import AppBar from "@/components/AppBar";
 import LinkList from "@/components/LinkList";
 
@@ -99,9 +101,11 @@ export default {
   components: {
     AppBar,
     LinkList,
+    Loader,
   },
 
   data: () => ({
+    loading: true,
     announce: "",
     //Good Comment
     GC: {
@@ -192,6 +196,8 @@ export default {
           //放棄率
           this.Fcst.yesterday["AbdRate"] =
             Math.round((yesterdayAbd / yesterdayActual) * 10000) / 100;
+
+          this.loading = false;
         })
       );
   },
@@ -201,18 +207,20 @@ export default {
 deep-orange = #FF5722;
 
 #announce /deep/ {
+  padding: 20px;
+
   p {
     margin: 0;
+  }
+
+  .ql-align-center {
+    text-align: center;
   }
 }
 
 .sheet {
   padding: 10px 20px;
   color: #000;
-}
-
-.ql-align-center {
-  text-align: center;
 }
 
 .title-label {

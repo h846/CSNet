@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-main>
+    <v-main class="bg">
       <nuxt />
     </v-main>
   </v-app>

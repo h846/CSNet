@@ -1,5 +1,6 @@
 <template>
   <v-container class="py-8 px-6" fluid>
+    <Loader :loading="loading" />
     <v-row>
       <v-col cols="12">
         <v-card width="500">
@@ -66,6 +67,8 @@
 </template>
 <script>
 import axios from "axios";
+
+import Loader from "@/components/loader";
 import CatAddDialog from "@/components/Admin/CatAddDialog";
 import LinkListDialog from "@/components/Admin/LinkListDialog";
 
@@ -73,9 +76,11 @@ export default {
   components: {
     LinkListDialog,
     CatAddDialog,
+    Loader,
   },
   data() {
     return {
+      loading: true,
       category: [],
       links: [],
       dialog: false,
@@ -101,6 +106,7 @@ export default {
         axios.spread((res1, res2) => {
           this.category = res1.data;
           this.links = res2.data;
+          this.loading = false;
         })
       );
   },
