@@ -1,7 +1,7 @@
 <template>
   <section class="bg">
     <Loader :loading="loading" />
-    <AppBar />
+    <AppBar :isAdmin="isAdmin" />
     <v-container>
       <v-row>
         <!-- Announcement -->
@@ -18,7 +18,7 @@
         <!-- Hot Voice-->
         <v-col cols="4">
           <v-sheet class="transparent">
-            <v-card min-width="344" outlined>
+            <v-card min-width="344">
               <v-card-title class="mb-5">
                 <span class="title-label">本日のグッドコメント</span>
                 <v-spacer></v-spacer>
@@ -42,7 +42,7 @@
               <v-card-text class="gc-comment">{{ GC.comment }}</v-card-text>
             </v-card>
             <!-- Call Forecast -->
-            <v-card class="mt-5" min-width="344" outlined>
+            <v-card class="mt-5" min-width="344">
               <v-card-title>
                 <span class="title-label">本日の入電予測</span>
               </v-card-title>
@@ -106,7 +106,7 @@ export default {
 
   data: () => ({
     loading: true,
-    announce: "",
+    isAdmin: false,
     //Good Comment
     GC: {
       source: "",
@@ -140,24 +140,43 @@ export default {
       return str.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, "");
     },
   },
+  computed: {
+    announce: function () {
+      return this.$store.state.announce;
+    },
+  },
   created() {
+    //ユーザーデータ取得
+    this.$store.dispatch("getUserData");
+    let userID = this.$store.state.userData.id;
+    //管理者判定
+    let admins = this.$store.state.admins;
+    this.isAdmin = admins.some((val) => val == userID);
+    this.$store.commit("setIsAdmin", this.isAdmin);
+    //情報取得
     axios
       .all([
-        axios.get(
-          "http://lejnet/API/src/json/csnet-announce.json?date=" +
-            new Date().getTime()
-        ),
-        axios.get(
-          "http://lejnet/API/accdb?db=CSNet/common/HotVoice/data/DB/data.mdb&table=good_comment_csnethome"
-        ),
-        axios.get(
-          "http://lejnet/API/accdb?db=CSNet/dataCenter/DB/Fcst/call/call_Result.accdb&table=data"
-        ),
+        axios.get("http://lejnet/API/src/json/csnet-announce.json", {
+          params: { date: new Date().getTime() },
+        }),
+        axios.get("http://lejnet/API/accdb", {
+          params: {
+            db: "CSNet/common/HotVoice/data/DB/data.mdb",
+            table: "good_comment_csnethome",
+          },
+        }),
+        axios.get("http://lejnet/API/accdb", {
+          params: {
+            db: "CSNet/dataCenter/DB/Fcst/call/call_Result.accdb",
+            table: "data",
+          },
+        }),
       ])
       .then(
         axios.spread((res1, res2, res3) => {
           //全体周知取得
-          this.announce = res1.data.data[0].text;
+          let msg = res1.data.data[0].text;
+          this.$store.commit("setAnnounce", msg);
           //グッドコメント取得。当日の日付のレコードを取得。
           let todaysComment = res2.data.find((val) => {
             let gcDate = new Date(val.GDdate);
@@ -226,7 +245,7 @@ deep-orange = #FF5722;
 .title-label {
   position: relative;
   padding: 0 0.5rem;
-  background: deep-orange; // #a6d3c8;
+  background: deep-orange;
   color: white;
   font-size: 1rem;
   border-radius: 2px;
@@ -257,7 +276,6 @@ deep-orange = #FF5722;
 }
 
 .fcst-today {
-  font-family: 'Roboto Mono', cursive;
   font-size: 2rem;
 }
 </style>

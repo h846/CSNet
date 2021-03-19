@@ -2,7 +2,7 @@
   <v-container>
     <Loader :loading="loading" />
     <v-sheet class="my-3" width="500" rounded>
-      <h1 class="mx-6 mt-6">{{ $route.params.items }}</h1>
+      <h1 class="ma-6 pt-3">{{ $route.params.items }}</h1>
       <v-row class="ml-3" align="center">
         <v-col cols="6">
           <v-btn
@@ -113,7 +113,6 @@ h1 {
   font-size: 1.5rem;
   color: #333;
   border-bottom: 2px solid #002566;
-  margin-bottom: 30px;
 
   &:first-letter {
     color: #002566;

@@ -4,9 +4,16 @@
 
     <v-spacer></v-spacer>
 
-    <v-btn to="Admin" nuxt color="yellow lighten-4" outlined>ADMIN</v-btn>
+    <v-btn v-if="isAdmin" to="Admin" nuxt color="yellow lighten-4" outlined
+      >ADMIN</v-btn
+    >
   </v-app-bar>
 </template>
+<script>
+export default {
+  props: ["isAdmin"],
+};
+</script>
 <style lang="stylus" scoped>
 a {
   text-decoration: none;

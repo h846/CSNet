@@ -25,7 +25,6 @@
 
 <script>
 export default {
-  props: ["userinfo"],
   data() {
     return {
       links: [
@@ -45,6 +44,13 @@ export default {
       ],
     };
   },
+
+  computed: {
+    userinfo: function () {
+      return this.$store.state.userData;
+    },
+  },
+
   methods: {
     //リンクが外部か内部かによって振り分け
     transPage(name, url) {

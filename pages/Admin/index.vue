@@ -1,11 +1,22 @@
 <template>
   <v-container class="py-8 px-6" fluid>
-    <!--tool bar -->
+    <!--title bar -->
     <v-toolbar dense elevation="1" class="mb-3">
       <v-toolbar-title>周知メッセージ編集エリア</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn color="primary" outlined>現在のメッセージ</v-btn>
+      <!-- Confirm Current Announce Message-->
+      <v-dialog v-model="currentAnnounce" max-width="750">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn color="primary" outlined v-bind="attrs" v-on="on">
+            現在のメッセージ
+          </v-btn>
+        </template>
+        <v-sheet>
+          <div id="preview" v-html="currentAnnounceMsg"></div>
+        </v-sheet>
+      </v-dialog>
     </v-toolbar>
+    <!-- Editor -->
     <client-only placeholder="Loading Your Editor...">
       <v-sheet>
         <vue-editor v-model="content" />
@@ -19,17 +30,14 @@
         >投 稿</v-btn
       >
     </client-only>
-
     <!--Comfirmation Dialog -->
-    <v-dialog v-model="dialog" persistent max-width="500">
+    <v-dialog max-width="350" v-model="dialog" persistent>
       <v-card>
-        <v-card-title class="headline"> 更新してよろしいですか? </v-card-title>
+        <v-card-title> 更新してよろしいですか? </v-card-title>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="submit_msg"> 更新 </v-btn>
-          <v-btn color="green darken-1" text @click="dialog = false">
-            キャンセル
-          </v-btn>
+          <v-btn color="success" @click="submit_msg"> 更新 </v-btn>
+          <v-btn color="dark" @click="dialog = false"> キャンセル </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -55,27 +63,18 @@ import axios from "axios";
 export default {
   data: () => ({
     content: "",
-    announce: "",
     loading: false,
     snackbar: false,
     dialog: false,
+    currentAnnounce: false,
+    currentAnnounceMsg: "",
     timeout: 3000,
   }),
-  mounted() {
-    this.getAnnounceData();
+  created() {
+    this.content = this.$store.state.announce;
+    this.currentAnnounceMsg = this.$store.state.announce;
   },
   methods: {
-    getAnnounceData: async function () {
-      await axios
-        .get(
-          "http://lejnet/API/src/json/csnet-announce.json?date=" +
-            new Date().getTime()
-        )
-        .then((res) => {
-          this.announce = res.data.data[0].text;
-          this.content = this.announce;
-        });
-    },
     submit_msg: function () {
       this.loading = true;
       this.dialog = false;
@@ -87,7 +86,10 @@ export default {
           function (res) {
             this.loading = false;
             this.snackbar = true;
-            console.log(res);
+            var self = this;
+            setTimeout(function () {
+              self.$router.push("/");
+            }, 3000);
           }.bind(this)
         );
     },
@@ -95,7 +97,11 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-.prv /deep/ * {
-  margin: 0;
+#preview /deep/ {
+  padding: 20px;
+
+  .ql-align-center {
+    text-align: center;
+  }
 }
 </style>

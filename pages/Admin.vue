@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavDrawer :userinfo="userinfo" />
+    <NavDrawer />
     <nuxt-child />
   </div>
 </template>
@@ -14,32 +14,9 @@ export default {
     NavDrawer,
   },
 
-  data: () => ({
-    admins: [
-      "sehara",
-      "hkinjo",
-      "mtanaka",
-      "myabe",
-      "kiwaoka",
-      "aishii",
-      "myamagu",
-      "hokobaya",
-      "mtakaha",
-      "hyashir",
-      "",
-    ],
-  }),
-
-  computed: {
-    userinfo: function () {
-      return this.$store.state.userData;
-    },
-  },
-
-  mounted() {
-    this.$store.dispatch("getUserData");
-    let userID = this.$store.state.userData.id;
-    let isAdmin = this.admins.some((val) => val == userID);
+  created() {
+    //管理者か判定。直リンクを阻止。
+    let isAdmin = this.$store.state.isAdmin;
     if (!isAdmin) {
       this.$router.replace("/");
     }
