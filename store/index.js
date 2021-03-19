@@ -14,8 +14,15 @@ export const state = () => ({
       "myamagu",
       "hokobaya",
       "mtakaha",
+      //IS Team
       "hyashir",
-      ""
+      "koguri",
+      "toogaki",
+      "jprzycho",
+      "nsuzuki",
+      "snishik",
+      "hmori",
+      ""//←本番環境では削除する
     ],
     isAdmin:false
 })
