@@ -84,22 +84,32 @@
           </v-sheet>
         </v-col>
       </v-row>
+      <!-- -->
+      <Banners />
+      <!-- Link List Start -->
+      <LinkList />
     </v-container>
-    <!-- Link List Start -->
-    <LinkList />
   </section>
 </template>
 <script>
 import Loader from "@/components/loader";
 import AppBar from "@/components/AppBar";
+import Banners from "@/components/HomeBanners";
 import LinkList from "@/components/LinkList";
 
 import axios from "axios";
 export default {
   name: "CSNetMainPage",
 
+  head() {
+    return {
+      title: "Home",
+    };
+  },
+
   components: {
     AppBar,
+    Banners,
     LinkList,
     Loader,
   },

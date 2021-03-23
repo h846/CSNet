@@ -10,6 +10,12 @@ import NavDrawer from "@/components/Admin/NavDrawer";
 export default {
   name: "AdminPage",
 
+  head() {
+    return {
+      title: "Admin Page",
+    };
+  },
+
   components: {
     NavDrawer,
   },
