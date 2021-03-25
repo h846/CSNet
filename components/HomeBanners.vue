@@ -2,10 +2,15 @@
   <v-sheet class="my-5 pa-5">
     <v-row>
       <v-col cols="3" v-for="banner in banners" :key="banner.id">
-        <v-card width="300">
+        <v-card
+          min-width="200"
+          max-width="200"
+          min-height="100"
+          max-height="100"
+        >
           <a :href="banner.url" target="_blank" style="text-decoration: none;">
             <v-img
-              :src="`https://picsum.photos/300/100?random=${banner.id}`"
+              :src="`https://picsum.photos/200/100?random=${banner.id}`"
               class="grey lighten-2"
             >
               <v-card-title class="mt-3" v-text="banner.title"></v-card-title>
