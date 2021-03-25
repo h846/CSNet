@@ -3,20 +3,22 @@
     <v-row>
       <v-col cols="3" v-for="banner in banners" :key="banner.id">
         <v-card width="300">
-          <v-img
-            :src="`https://picsum.photos/300/100?random=${banner.id}`"
-            class="grey lighten-2"
-          >
-            <v-card-title class="mt-3" v-text="banner.title"></v-card-title>
-            <template v-slot:placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular
-                  indeterminate
-                  color="grey lighten-5"
-                ></v-progress-circular>
-              </v-row>
-            </template>
-          </v-img>
+          <a :href="banner.url" target="_blank" style="text-decoration: none;">
+            <v-img
+              :src="`https://picsum.photos/300/100?random=${banner.id}`"
+              class="grey lighten-2"
+            >
+              <v-card-title class="mt-3" v-text="banner.title"></v-card-title>
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="grey lighten-5"
+                  ></v-progress-circular>
+                </v-row>
+              </template>
+            </v-img>
+          </a>
         </v-card>
       </v-col>
     </v-row>
@@ -27,7 +29,7 @@ export default {
   data: function() {
     return {
       banners: [
-        { id: "1", title: "強化週間", img: "", url: "" },
+        { id: "1", title: "強化週間", img: "", url: "http://lejnet/" },
         { id: "2", title: "WANTED", img: "", url: "" },
         { id: "3", title: "アパレル検定", img: "", url: "" },
         { id: "4", title: "CSチーム表", img: "", url: "" },

@@ -3,10 +3,10 @@
     <v-toolbar-title>CS-Net</v-toolbar-title>
 
     <v-tabs optional>
-      <v-tab href="http://lejnet/csnet/common/mail/index.htm">
+      <v-tab href="http://lejnet/csnet/common/mail/index.htm" target="_blank">
         CS-Netメール
       </v-tab>
-      <v-tab href="http://lejnet/csnet/userdata/index.htm">
+      <v-tab href="http://lejnet/csnet/userdata/index.htm" target="_blank">
         ユーザー設定
       </v-tab>
     </v-tabs>
@@ -18,7 +18,7 @@
 </template>
 <script>
 export default {
-  props: ["isAdmin"],
+  props: ["isAdmin"]
 };
 </script>
 <style lang="stylus" scoped>
