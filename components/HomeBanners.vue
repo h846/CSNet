@@ -1,14 +1,13 @@
 <template>
   <v-sheet class="my-5 pa-5">
     <v-row>
-      <v-col cols="2" v-for="banner in banners" :key="banner.id">
-        <v-card>
+      <v-col cols="3" v-for="banner in banners" :key="banner.id">
+        <v-card width="300">
           <v-img
-            :src="`https://picsum.photos/500/300?image=${banner.id * 5 + 10}`"
-            aspect-ratio="1"
+            :src="`https://picsum.photos/300/100?random=${banner.id}`"
             class="grey lighten-2"
           >
-            <v-card-title v-text="banner.title"></v-card-title>
+            <v-card-title class="mt-3" v-text="banner.title"></v-card-title>
             <template v-slot:placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
                 <v-progress-circular
@@ -42,6 +41,7 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .v-card__title {
+  text-align :center;
   color: #FFF !important;
   text-shadow: black 1px 1px 0, black -1px -1px 0, black -1px 1px 0, black 1px -1px 0, black 0px 1px 0, black 0 -1px 0, black -1px 0 0, black 1px 0 0;
   /* 上、下 */
