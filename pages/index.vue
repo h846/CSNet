@@ -2,10 +2,10 @@
   <section class="bg">
     <Loader :loading="loading" />
     <AppBar :isAdmin="isAdmin" />
-    <v-container>
+    <v-container class="px-5" fluid>
       <v-row>
         <!-- Announcement -->
-        <v-col cols="8">
+        <v-col cols="12" sm="7">
           <v-sheet
             class="sheet overflow-y-auto"
             :rounded="true"
@@ -16,9 +16,9 @@
           </v-sheet>
         </v-col>
         <!-- Hot Voice-->
-        <v-col cols="4">
+        <v-col cols="12" sm="5">
           <v-sheet class="transparent">
-            <v-card min-width="344">
+            <v-card>
               <v-card-title class="mb-5">
                 <span class="title-label">本日のグッドコメント</span>
                 <v-spacer></v-spacer>
@@ -42,17 +42,40 @@
               <v-card-text class="gc-comment">{{ GC.comment }}</v-card-text>
             </v-card>
             <!-- Call Forecast -->
-            <v-card class="mt-5" min-width="344">
+            <v-card class="mt-5">
               <v-card-title>
                 <span class="title-label">本日の入電予測</span>
               </v-card-title>
-              <v-card-text>
-                <span class="fcst-today">{{ Fcst.today }}</span>
-                本
+              <v-card-text class="ml-3 pa-0">
+                <span class="fcst-today">{{ Fcst.today }}本</span>
               </v-card-text>
               <v-card-title>
                 <span class="title-label">昨日の入電結果</span>
               </v-card-title>
+              <v-row>
+                <v-col cols="12" class="pa-0">
+                  <div class="ml-8 mt-3 mb-3">
+                    <p class="ma-0">入電数</p>
+                    <span>{{ Fcst.yesterday.actual }}本 </span>
+                    <span>(予測の{{ Fcst.yesterday.FcstRate }}%)</span>
+                  </div>
+                </v-col>
+                <v-col cols="12" class="pa-0">
+                  <div class="ml-8 mb-3">
+                    <p class="ma-0">入電数</p>
+                    <span>{{ Fcst.yesterday.actual }}本 </span>
+                    <span>(予測の{{ Fcst.yesterday.FcstRate }}%)</span>
+                  </div>
+                </v-col>
+                <v-col cols="12" class="pa-0">
+                  <div class="ml-8 mb-3">
+                    <p class="ma-0">入電数</p>
+                    <span>{{ Fcst.yesterday.actual }}本 </span>
+                    <span>(予測の{{ Fcst.yesterday.FcstRate }}%)</span>
+                  </div>
+                </v-col>
+              </v-row>
+              <!--
               <v-list-item two-line>
                 <v-list-item-content>
                   <v-list-item-title>入電数</v-list-item-title>
@@ -80,6 +103,7 @@
                   </v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
+              -->
             </v-card>
           </v-sheet>
         </v-col>
@@ -103,7 +127,7 @@ export default {
 
   head() {
     return {
-      title: "Home",
+      title: "Home"
     };
   },
 
@@ -111,7 +135,7 @@ export default {
     AppBar,
     Banners,
     LinkList,
-    Loader,
+    Loader
   },
 
   data: () => ({
@@ -122,7 +146,7 @@ export default {
       source: "",
       dept: "",
       operator: "",
-      comment: "",
+      comment: ""
     },
     Fcst: {
       today: "",
@@ -132,13 +156,13 @@ export default {
         abd: 0,
         裏abd: 0,
         FcstRate: null,
-        AbdRate: null,
-      },
-    },
+        AbdRate: null
+      }
+    }
   }),
   methods: {
     //当日判定
-    areSameDate: function (d1, d2) {
+    areSameDate: function(d1, d2) {
       return (
         d1.getFullYear() == d2.getFullYear() &&
         d1.getMonth() == d2.getMonth() &&
@@ -146,14 +170,14 @@ export default {
       );
     },
     //HTMLタグ除去
-    delHTMLtag: function (str) {
+    delHTMLtag: function(str) {
       return str.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, "");
-    },
+    }
   },
   computed: {
-    announce: function () {
+    announce: function() {
       return this.$store.state.announce;
-    },
+    }
   },
   created() {
     //ユーザーデータ取得
@@ -161,26 +185,26 @@ export default {
     let userID = this.$store.state.userData.id;
     //管理者判定
     let admins = this.$store.state.admins;
-    this.isAdmin = admins.some((val) => val == userID);
+    this.isAdmin = admins.some(val => val == userID);
     this.$store.commit("setIsAdmin", this.isAdmin);
     //情報取得
     axios
       .all([
         axios.get("http://lejnet/API/src/json/csnet-announce.json", {
-          params: { date: new Date().getTime() },
+          params: { date: new Date().getTime() }
         }),
         axios.get("http://lejnet/API/accdb", {
           params: {
             db: "CSNet/common/HotVoice/data/DB/data.mdb",
-            table: "good_comment_csnethome",
-          },
+            table: "good_comment_csnethome"
+          }
         }),
         axios.get("http://lejnet/API/accdb", {
           params: {
             db: "CSNet/dataCenter/DB/Fcst/call/call_Result.accdb",
-            table: "data",
-          },
-        }),
+            table: "data"
+          }
+        })
       ])
       .then(
         axios.spread((res1, res2, res3) => {
@@ -188,7 +212,7 @@ export default {
           let msg = res1.data.data[0].text;
           this.$store.commit("setAnnounce", msg);
           //グッドコメント取得。当日の日付のレコードを取得。
-          let todaysComment = res2.data.find((val) => {
+          let todaysComment = res2.data.find(val => {
             let gcDate = new Date(val.GDdate);
             return this.areSameDate(gcDate, new Date());
           });
@@ -198,13 +222,13 @@ export default {
           this.GC.operator = this.delHTMLtag(todaysComment["csr_name"]);
           this.GC.comment = this.delHTMLtag(todaysComment["comment"]);
           // 入電予測
-          let callFcst = res3.data.find((val) => {
+          let callFcst = res3.data.find(val => {
             let fcstDate = new Date(val["ｄａｔｅ"]); //全角　(；ﾟДﾟ)
             return this.areSameDate(fcstDate, new Date());
           });
           this.Fcst.today = callFcst["Fcst"];
           //昨日の入電結果
-          let yesterdayResult = res3.data.find((val) => {
+          let yesterdayResult = res3.data.find(val => {
             let fcstDate = new Date(val["ｄａｔｅ"]); //全角　(；ﾟДﾟ)
             let yesterday = new Date();
             yesterday.setDate(yesterday.getDate() - 1);
@@ -229,7 +253,7 @@ export default {
           this.loading = false;
         })
       );
-  },
+  }
 };
 </script>
 <style lang="stylus" scoped>

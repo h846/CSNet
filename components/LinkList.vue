@@ -1,8 +1,8 @@
 <template>
-  <v-row>
-    <v-col v-for="list in category" :key="list.id" cols="4">
+  <v-row justify="center">
+    <v-col v-for="list in category" :key="list.id" cols="12" md="4" sm="6">
       <transition name="expand">
-        <v-card height="300" class="overflow-y-auto ma-3">
+        <v-card width="300" height="300" class="overflow-y-auto mx-auto">
           <v-card-title class="link-title">{{ list.name }}</v-card-title>
           <v-list dense>
             <v-list-item v-for="link in rtnLinks(list.ID)" :key="link.ID">
@@ -28,28 +28,28 @@ export default {
     return {
       category: [],
       links: [],
-      isExpand: false,
+      isExpand: false
     };
   },
   created() {
     this.getLinkList();
   },
   methods: {
-    getLinkList: async function () {
+    getLinkList: async function() {
       await axios
         .all([
           axios.get("http://lejnet/API/accdb", {
             params: {
               db: "CSNet/dataCenter/DB/Tool/tools_home.mdb",
-              table: "category",
-            },
+              table: "category"
+            }
           }),
           axios.get("http://lejnet/API/accdb", {
             params: {
               db: "CSNet/dataCenter/DB/Tool/tools_home.mdb",
-              table: "tool",
-            },
-          }),
+              table: "tool"
+            }
+          })
         ])
         .then(
           axios.spread((res1, res2) => {
@@ -58,19 +58,19 @@ export default {
             console.log("link list loaded.");
           })
         )
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
         });
     },
-    rtnLinks: function (catID) {
+    rtnLinks: function(catID) {
       console.log(catID);
       //Return items with the same category ID
-      let linkList = this.links.filter((val) => {
+      let linkList = this.links.filter(val => {
         return catID == val.category;
       });
       return linkList;
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>

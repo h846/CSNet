@@ -1,19 +1,15 @@
 <template>
   <v-sheet class="my-5 pa-5">
     <v-row>
-      <v-col cols="3" v-for="banner in banners" :key="banner.id">
-        <v-card
-          min-width="200"
-          max-width="200"
-          min-height="100"
-          max-height="100"
-        >
-          <a :href="banner.url" target="_blank" style="text-decoration: none;">
+      <v-col sm="4" md="3" cols="6" v-for="banner in banners" :key="banner.id">
+        <v-card min-width="180" max-width="180" width="180" height="50">
+          <a :href="banner.url" target="_blank">
             <v-img
-              :src="`https://picsum.photos/200/100?random=${banner.id}`"
+              :src="`https://picsum.photos/180/50?random=${banner.id}`"
               class="grey lighten-2"
+              height="50"
             >
-              <v-card-title class="mt-3" v-text="banner.title"></v-card-title>
+              <p class="banner_title">{{ banner.title }}</p>
               <template v-slot:placeholder>
                 <v-row class="fill-height ma-0" align="center" justify="center">
                   <v-progress-circular
@@ -47,10 +43,29 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-.v-card__title {
-  text-align :center;
+.banner_title {
+  text-align:center;
+  height:100%;
+  line-height 50px;
+  margin:0;
   color: #FFF !important;
-  text-shadow: black 1px 1px 0, black -1px -1px 0, black -1px 1px 0, black 1px -1px 0, black 0px 1px 0, black 0 -1px 0, black -1px 0 0, black 1px 0 0;
+  font-size: 0.8rem;
+  text-shadow: black 1px 1px 0,
+  black -1px -1px 0,
+  black -1px 1px 0,
+  black 1px -1px 0,
+  black 0px 1px 0,
+  black 0 -1px 0,
+  black -1px 0 0,
+  black 1px 0 0;
   /* 上、下 */
+}
+
+a{
+  text-decoration: none;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+
 }
 </style>
