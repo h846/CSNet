@@ -1,11 +1,11 @@
 <template>
-  <v-sheet class="my-5 pa-5">
+  <v-sheet class="my-5 pa-5" min-width="450">
     <v-row>
       <v-col sm="4" md="3" cols="6" v-for="banner in banners" :key="banner.id">
-        <v-card min-width="180" max-width="180" width="180" height="50">
+        <v-card min-width="200" max-width="200" width="200" height="50">
           <a :href="banner.url" target="_blank">
             <v-img
-              :src="`https://picsum.photos/180/50?random=${banner.id}`"
+              :src="`https://picsum.photos/200/50?random=${banner.id}`"
               class="grey lighten-2"
               height="50"
             >
@@ -49,7 +49,8 @@ export default {
   line-height 50px;
   margin:0;
   color: #FFF !important;
-  font-size: 0.8rem;
+  font-size: 1.1rem;
+  letter-spacing:1px;
   text-shadow: black 1px 1px 0,
   black -1px -1px 0,
   black -1px 1px 0,

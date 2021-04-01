@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-col v-for="list in category" :key="list.id" cols="12" md="4" sm="6">
       <transition name="expand">
-        <v-card width="300" height="300" class="overflow-y-auto mx-auto">
+        <v-card height="300" class="overflow-y-auto mx-auto">
           <v-card-title class="link-title">{{ list.name }}</v-card-title>
           <v-list dense>
             <v-list-item v-for="link in rtnLinks(list.ID)" :key="link.ID">
@@ -63,7 +63,6 @@ export default {
         });
     },
     rtnLinks: function(catID) {
-      console.log(catID);
       //Return items with the same category ID
       let linkList = this.links.filter(val => {
         return catID == val.category;

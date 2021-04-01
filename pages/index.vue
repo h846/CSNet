@@ -43,67 +43,43 @@
             </v-card>
             <!-- Call Forecast -->
             <v-card class="mt-5">
-              <v-card-title>
+              <v-card-title class="">
                 <span class="title-label">本日の入電予測</span>
               </v-card-title>
-              <v-card-text class="ml-3 pa-0">
+              <v-card-text class="ml-4 pa-0">
                 <span class="fcst-today">{{ Fcst.today }}本</span>
               </v-card-text>
               <v-card-title>
                 <span class="title-label">昨日の入電結果</span>
               </v-card-title>
               <v-row>
-                <v-col cols="12" class="pa-0">
-                  <div class="ml-8 mt-3 mb-3">
+                <v-col cols="12" sm="6" class="pa-0">
+                  <div class="ml-8 mb-3">
                     <p class="ma-0">入電数</p>
-                    <span>{{ Fcst.yesterday.actual }}本 </span>
+                    <span class="font-weight-bold"
+                      >{{ Fcst.yesterday.actual }}本
+                    </span>
                     <span>(予測の{{ Fcst.yesterday.FcstRate }}%)</span>
                   </div>
                 </v-col>
-                <v-col cols="12" class="pa-0">
+                <v-col cols="12" sm="6" class="pa-0">
                   <div class="ml-8 mb-3">
-                    <p class="ma-0">入電数</p>
-                    <span>{{ Fcst.yesterday.actual }}本 </span>
-                    <span>(予測の{{ Fcst.yesterday.FcstRate }}%)</span>
+                    <p class="ma-0">放棄数</p>
+                    <span class="font-weight-bold"
+                      >{{ Fcst.yesterday.abd }}本</span
+                    >
+                    <span>(入電の{{ Fcst.yesterday.AbdRate }}%)</span>
                   </div>
                 </v-col>
-                <v-col cols="12" class="pa-0">
+                <v-col cols="12" sm="6" class="pa-0">
                   <div class="ml-8 mb-3">
-                    <p class="ma-0">入電数</p>
-                    <span>{{ Fcst.yesterday.actual }}本 </span>
-                    <span>(予測の{{ Fcst.yesterday.FcstRate }}%)</span>
+                    <p class="ma-0">着信できなかった本数</p>
+                    <span class="font-weight-bold"
+                      >{{ Fcst.yesterday["裏abd"] }}本</span
+                    >
                   </div>
                 </v-col>
               </v-row>
-              <!--
-              <v-list-item two-line>
-                <v-list-item-content>
-                  <v-list-item-title>入電数</v-list-item-title>
-                  <v-list-item-subtitle
-                    >{{ Fcst.yesterday.actual }}本 (予測の{{
-                      Fcst.yesterday.FcstRate
-                    }}%)</v-list-item-subtitle
-                  >
-                </v-list-item-content>
-
-                <v-list-item-content>
-                  <v-list-item-title> 放棄数 </v-list-item-title>
-                  <v-list-item-subtitle>
-                    {{ Fcst.yesterday.abd }}本 (入電の{{
-                      Fcst.yesterday.AbdRate
-                    }}%)
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-              <v-list-item two-line>
-                <v-list-item-content>
-                  <v-list-item-title>着信できなかった本数</v-list-item-title>
-                  <v-list-item-subtitle>
-                    {{ Fcst.yesterday["裏abd"] }}本
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-              -->
             </v-card>
           </v-sheet>
         </v-col>
