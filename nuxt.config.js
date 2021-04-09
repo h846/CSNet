@@ -3,7 +3,7 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   router: {
     //パスの設定。本番環境で動かすのに必要
-    base: process.env.NODE_ENV === 'development' ? '/' : '/CSNet_dev/test/'
+    base: process.env.NODE_ENV === 'development' ? '/' : '/CSNet/new/'
   },
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
@@ -15,14 +15,24 @@ export default {
     htmlAttrs: {
       lang: 'en'
     },
-    meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' }
+    meta: [{
+        charset: 'utf-8'
+      },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1'
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content: ''
+      }
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: 'http://lejnet/CSNet_dev/test/favicon.ico' }
-    ]
+    link: [{
+      rel: 'icon',
+      type: 'image/x-icon',
+      href: 'http://lejnet/CSNet_dev/test/favicon.ico'
+    }]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -31,9 +41,10 @@ export default {
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-    { src: '~plugins/quill.js', ssr: false }
-  ],
+  plugins: [{
+    src: '~plugins/quill.js',
+    ssr: false
+  }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -73,6 +84,5 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-  }
+  build: {}
 }
