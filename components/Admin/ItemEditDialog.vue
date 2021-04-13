@@ -31,15 +31,28 @@ export default {
       url: ""
     };
   },
-  created() {
-    this.dispName = this.link[0].Name;
-    this.url = this.link[0].Link;
+  created() {},
+  watch: {
+    link: function(val) {
+      this.dispName = val[0].Name;
+      this.url = val[0].Link;
+      console.log(val[0]);
+    }
   },
   methods: {
     closeDialog: function() {
       this.$emit("closeEditDialog");
     },
-    updateItem() {},
+    updateItem() {
+      axios
+        .post("http://lejnet/API/accdb", {
+          sql: `UPDATE tool SET Name = '${this.dispName}', Link = '${this.url}' WHERE ID = ${this.link[0].ID}`,
+          db: "CSNet/dataCenter/DB/Tool/tools_home.mdb"
+        })
+        .then(res => {
+          console.log("DONE");
+        });
+    },
     /*
     deleteItem: function() {
       for (let id of this.checkedItems) {
