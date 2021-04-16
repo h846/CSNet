@@ -65,7 +65,11 @@
       :dialog="editDialog"
       :link="link"
       @closeEditDialog="editDialog = false"
+      @SuccessfulUpdate="itemUpdated"
     />
+    <v-snackbar color="success" v-model="edSnackbar">
+      更新完了しました！
+    </v-snackbar>
   </v-container>
 </template>
 <script>
@@ -91,23 +95,13 @@ export default {
       delDialog: false,
       addDialog: false,
       editDialog: false,
+      edSnackbar: false,
       link: [{ Name: "none" }],
       loading: true
     };
   },
   created() {
-    axios
-      .get("http://lejnet/API/accdb/", {
-        params: {
-          db: "CSNet/dataCenter/DB/Tool/tools_home.mdb",
-          table: "tool",
-          date: new Date().getTime()
-        }
-      })
-      .then(res => {
-        this.dbdata = res.data;
-        this.loading = false;
-      });
+    this.getItemData();
   },
   computed: {
     itemList: function() {
@@ -126,10 +120,28 @@ export default {
     }
   },
   methods: {
+    async getItemData() {
+      await axios
+        .get("http://lejnet/API/accdb/", {
+          params: {
+            db: "CSNet/dataCenter/DB/Tool/tools_home.mdb",
+            table: "tool",
+            date: new Date().getTime()
+          }
+        })
+        .then(res => {
+          this.dbdata = res.data;
+          this.loading = false;
+        });
+    },
     editItem(itemID) {
       this.link = this.dbdata.filter(val => val.ID == itemID);
       console.log(this.link, this.link[0].Name);
       this.editDialog = true;
+    },
+    itemUpdated() {
+      this.getItemData();
+      this.edSnackbar = true;
     }
   }
 };

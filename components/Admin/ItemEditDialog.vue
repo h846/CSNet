@@ -6,9 +6,20 @@
       </v-card-title>
       <v-card-text>
         <v-form>
-          <v-text-field label="表示名" v-model="dispName" required>
+          <v-text-field
+            label="表示名"
+            :rules="[rules.required]"
+            v-model="dispName"
+            required
+          >
           </v-text-field>
-          <v-text-field label="URL" v-model="url" required> </v-text-field>
+          <v-text-field
+            label="URL"
+            :rules="[rules.required, rules.nothta]"
+            v-model="url"
+            required
+          >
+          </v-text-field>
         </v-form>
       </v-card-text>
       <v-card-actions>
@@ -28,7 +39,14 @@ export default {
   data() {
     return {
       dispName: "",
-      url: ""
+      url: "",
+      rules: {
+        required: value => !!value || "何か入力してください",
+        nothta: value => {
+          const pattern = /(\.hta)$/;
+          return !pattern.test(value) || "htaは使用しないでください";
+        }
+      }
     };
   },
   created() {},
@@ -52,6 +70,8 @@ export default {
         .then(res => {
           console.log("DONE");
         });
+      this.closeDialog();
+      this.$emit("SuccessfulUpdate");
     },
     /*
     deleteItem: function() {
