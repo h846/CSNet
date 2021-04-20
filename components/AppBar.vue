@@ -10,7 +10,8 @@
         ユーザー設定
       </v-tab>
     </v-tabs>
-
+    <!-- 実装する -->
+    <v-toolbar-title>おはようございます。やっしさん。</v-toolbar-title>
     <v-btn v-if="isAdmin" to="Admin" nuxt color="yellow lighten-4" outlined
       >ADMIN</v-btn
     >

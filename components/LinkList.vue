@@ -4,17 +4,16 @@
       <transition name="expand">
         <v-card height="300" class="overflow-y-auto mx-auto">
           <v-card-title class="link-title">{{ list.name }}</v-card-title>
-          <v-list dense>
-            <v-list-item v-for="link in rtnLinks(list.ID)" :key="link.ID">
-              <v-list-item-content v-if="link.category == list.ID">
-                <v-list-item-title>
-                  <a :href="link.Link" target="_blank">
-                    {{ link.Name }}
-                  </a>
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
+          <ul>
+            <li v-for="link in rtnLinks(list.ID)" :key="link.ID">
+              <a
+                v-if="link.category == list.ID"
+                :href="link.Link"
+                target="_blank"
+                >{{ link.Name }}</a
+              >
+            </li>
+          </ul>
         </v-card>
       </transition>
     </v-col>
@@ -79,11 +78,15 @@ export default {
   font-weight: bold;
   border-top: 2px solid #002566;
   border-bottom: 2px solid #002566;
-  margin: 0 30px;
-  margin-top: 30px;
-  padding: 5px 0;
+  margin: 10px 30px;
+  padding:0;
 }
-
+ul,li{
+  list-style-type:none;
+  padding:0;
+  margin:0;
+  margin-left: 20px;
+}
 a {
   text-decoration: none;
 }
