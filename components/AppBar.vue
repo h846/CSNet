@@ -11,7 +11,7 @@
       </v-tab>
     </v-tabs>
     <!-- 実装する -->
-    <v-toolbar-title>おはようございます。やっしさん。</v-toolbar-title>
+    <v-toolbar-title>{{ greeting }}</v-toolbar-title>
     <v-btn v-if="isAdmin" to="Admin" nuxt color="yellow lighten-4" outlined
       >ADMIN</v-btn
     >
@@ -19,7 +19,23 @@
 </template>
 <script>
 export default {
-  props: ["isAdmin"]
+  props: ["isAdmin"],
+  computed: {
+    greeting: function() {
+      let greet;
+      let nowHour = new Date().getHours();
+      if (nowHour >= 4 && nowHour < 11) {
+        greet = "おはようございます。";
+      } else if (nowHour >= 11 && nowHour < 18) {
+        greet = "こんにちは。";
+      } else if (nowHour >= 18 || (nowHour >= 0 && nowHour < 4)) {
+        greet = "こんばんは。";
+      }
+      let userName = this.$store.state.userData;
+
+      return greet + userName.name + "さん。";
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>
