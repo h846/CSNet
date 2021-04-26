@@ -2,7 +2,7 @@
   <v-container class="py-8 px-6" fluid>
     <!--title bar -->
     <v-toolbar dense elevation="1" class="mb-3">
-      <v-toolbar-title>周知メッセージ編集エリア</v-toolbar-title>
+      <v-toolbar-title>今日のお知らせ編集ページ</v-toolbar-title>
       <v-spacer></v-spacer>
       <!-- Confirm Current Announce Message-->
       <v-dialog v-model="currentAnnounce" max-width="750">
@@ -68,32 +68,33 @@ export default {
     dialog: false,
     currentAnnounce: false,
     currentAnnounceMsg: "",
-    timeout: 3000,
+    timeout: 3000
   }),
   created() {
     this.content = this.$store.state.announce;
     this.currentAnnounceMsg = this.$store.state.announce;
   },
   methods: {
-    submit_msg: function () {
+    submit_msg: function() {
       this.loading = true;
       this.dialog = false;
       axios
-        .post("http://lejnet/API/json/announce", {
-          announce: this.content,
+        .post("http://lejnet/API/json", {
+          file: "csnet/announce.json",
+          data: this.content
         })
         .then(
-          function (res) {
+          function(res) {
             this.loading = false;
             this.snackbar = true;
             var self = this;
-            setTimeout(function () {
+            setTimeout(function() {
               self.$router.push("/");
             }, 3000);
           }.bind(this)
         );
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>

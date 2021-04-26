@@ -28,27 +28,28 @@ export default {
   data() {
     return {
       links: [
-        ["mdi-message-bulleted", "全体周知編集", "/Admin"],
+        ["mdi-message-bulleted", "今日のお知らせ編集", "/Admin"],
+        ["mdi-exclamation-thick", "重要メッセージ編集", "/Admin/importantMsg"],
         ["mdi-hammer-screwdriver", "ツールリンク編集", "/Admin/toollinks"],
         ["mdi-home", "CS-Netホーム", "/"],
         [
           "mdi-email",
           "CS-Netメール",
-          "http://lejnet/csnet/common/mail/index.htm",
+          "http://lejnet/csnet/common/mail/index.htm"
         ],
         [
           "mdi-account-circle",
           "ユーザー設定",
-          "http://lejnet/csnet/userdata/index.htm",
-        ],
-      ],
+          "http://lejnet/csnet/userdata/index.htm"
+        ]
+      ]
     };
   },
 
   computed: {
-    userinfo: function () {
+    userinfo: function() {
       return this.$store.state.userData;
-    },
+    }
   },
 
   methods: {
@@ -59,7 +60,7 @@ export default {
       } else {
         this.$router.push(url);
       }
-    },
-  },
+    }
+  }
 };
 </script>

@@ -166,7 +166,7 @@ export default {
     //情報取得
     axios
       .all([
-        axios.get("http://lejnet/API/src/json/csnet-announce.json", {
+        axios.get("http://lejnet/API/src/json/csnet/announce.json", {
           params: { date: new Date().getTime() }
         }),
         axios.get("http://lejnet/API/accdb", {
@@ -184,8 +184,8 @@ export default {
       ])
       .then(
         axios.spread((res1, res2, res3) => {
-          //全体周知取得
-          let msg = res1.data.data[0].text;
+          //最新の今日のお知らせ取得
+          let msg = res1.data.list[0].text;
           this.$store.commit("setAnnounce", msg);
           //グッドコメント取得。当日の日付のレコードを取得。
           let todaysComment = res2.data.find(val => {
