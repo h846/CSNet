@@ -1,8 +1,8 @@
 <template>
-  <section class="bg">
+  <section>
     <Loader :loading="loading" />
     <AppBar :isAdmin="isAdmin" />
-    <v-container class="px-5" fluid>
+    <v-container class="px-5">
       <v-row>
         <!-- Announcement -->
         <v-col cols="12" sm="7">
@@ -10,9 +10,20 @@
             class="sheet overflow-y-auto"
             :rounded="true"
             elevation="3"
-            height="100%"
+            height="65%"
           >
+            <h1>本日のお知らせ</h1>
             <div id="announce" v-html="announce"></div>
+          </v-sheet>
+          <!-- Import Message-->
+          <v-sheet
+            class="sheet overflow-y-auto mt-3"
+            :rounded="true"
+            elevation="3"
+            height="35%"
+          >
+            <h1>重要事項</h1>
+            <div id="importMsg" v-html="importMsg"></div>
           </v-sheet>
         </v-col>
         <!-- Hot Voice-->
@@ -153,28 +164,34 @@ export default {
   computed: {
     announce: function() {
       return this.$store.state.announce;
+    },
+    importMsg: function() {
+      return this.$store.state.importMsg;
     }
   },
   created() {
+    //全体周知メッセージ取得
+    this.$store.dispatch("getAnnounceData");
+    // 重要メッセージ取得
+    this.$store.dispatch("getImportMsgData");
+    //管理者判定
     //ユーザーデータ取得
     this.$store.dispatch("getUserData");
     let userID = this.$store.state.userData.id;
-    //管理者判定
     let admins = this.$store.state.admins;
     this.isAdmin = admins.some(val => val == userID);
     this.$store.commit("setIsAdmin", this.isAdmin);
     //情報取得
     axios
       .all([
-        axios.get("http://lejnet/API/src/json/csnet/announce.json", {
-          params: { date: new Date().getTime() }
-        }),
+        //グッドコメント
         axios.get("http://lejnet/API/accdb", {
           params: {
             db: "CSNet/common/HotVoice/data/DB/data.mdb",
             table: "good_comment_csnethome"
           }
         }),
+        //入電予測
         axios.get("http://lejnet/API/accdb", {
           params: {
             db: "CSNet/dataCenter/DB/Fcst/call/call_Result.accdb",
@@ -183,12 +200,9 @@ export default {
         })
       ])
       .then(
-        axios.spread((res1, res2, res3) => {
-          //最新の今日のお知らせ取得
-          let msg = res1.data.list[0].text;
-          this.$store.commit("setAnnounce", msg);
+        axios.spread((goodComment, callForecast) => {
           //グッドコメント取得。当日の日付のレコードを取得。
-          let todaysComment = res2.data.find(val => {
+          let todaysComment = goodComment.data.find(val => {
             let gcDate = new Date(val.GDdate);
             return this.areSameDate(gcDate, new Date());
           });
@@ -198,13 +212,13 @@ export default {
           this.GC.operator = this.delHTMLtag(todaysComment["csr_name"]);
           this.GC.comment = this.delHTMLtag(todaysComment["comment"]);
           // 入電予測
-          let callFcst = res3.data.find(val => {
+          let callFcst = callForecast.data.find(val => {
             let fcstDate = new Date(val["ｄａｔｅ"]); //全角　(；ﾟДﾟ)
             return this.areSameDate(fcstDate, new Date());
           });
           this.Fcst.today = callFcst["Fcst"];
           //昨日の入電結果
-          let yesterdayResult = res3.data.find(val => {
+          let yesterdayResult = callForecast.data.find(val => {
             let fcstDate = new Date(val["ｄａｔｅ"]); //全角　(；ﾟДﾟ)
             let yesterday = new Date();
             yesterday.setDate(yesterday.getDate() - 1);
@@ -235,7 +249,7 @@ export default {
 <style lang="stylus" scoped>
 deep-orange = #FF5722;
 
-#announce /deep/ {
+#announce /deep/, #importMsg /deep/{
   padding: 20px;
 
   p {

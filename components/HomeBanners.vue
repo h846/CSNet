@@ -1,5 +1,5 @@
 <template>
-  <v-sheet class="my-5 pa-5" min-width="450">
+  <v-sheet class="my-5 pa-5" min-width="450" elevation="3" rounded>
     <v-row>
       <v-col
         md="3"

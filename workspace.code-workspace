@@ -2,6 +2,12 @@
     "folders": [
         {
             "path": "."
+        },
+        {
+            "path": "E:\\API"
+        },
+        {
+            "path": "E:\\CSNet"
         }
     ]
 }
