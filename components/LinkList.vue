@@ -1,8 +1,8 @@
 <template>
-  <v-row justify="center">
-    <v-col v-for="list in category" :key="list.id" cols="12" md="4" sm="6">
-      <transition name="expand">
-        <v-card height="300" class="overflow-y-auto mx-auto">
+  <draggable draggable=".item">
+    <v-row justify="center">
+      <v-col v-for="list in category" :key="list.id" cols="12" md="4" sm="6">
+        <v-card width="350" height="300" class="overflow-y-auto mx-auto">
           <v-card-title class="link-title">{{ list.name }}</v-card-title>
           <ul>
             <li v-for="link in rtnLinks(list.ID)" :key="link.ID">
@@ -15,14 +15,18 @@
             </li>
           </ul>
         </v-card>
-      </transition>
-    </v-col>
-  </v-row>
+      </v-col>
+    </v-row>
+  </draggable>
 </template>
 <script>
 import axios from "axios";
+import draggable from "vuedraggable";
 
 export default {
+  components: {
+    draggable
+  },
   data() {
     return {
       category: [],
@@ -72,6 +76,7 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
+
 .link-title {
   justify-content: center;
   font-size: 1.2rem;
