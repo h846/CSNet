@@ -1,22 +1,31 @@
 <template>
-  <draggable draggable=".item">
-    <v-row justify="center">
-      <v-col v-for="list in category" :key="list.id" cols="12" md="4" sm="6">
-        <v-card width="350" height="300" class="overflow-y-auto mx-auto">
-          <v-card-title class="link-title">{{ list.name }}</v-card-title>
-          <ul>
-            <li v-for="link in rtnLinks(list.ID)" :key="link.ID">
-              <a
-                v-if="link.category == list.ID"
-                :href="link.Link"
-                target="_blank"
-                >{{ link.Name }}</a
-              >
-            </li>
-          </ul>
-        </v-card>
-      </v-col>
-    </v-row>
+  <draggable
+    v-model="category"
+    id="flex-container"
+    :animation="200"
+    @start="dragging = true"
+    @end="dragging = false"
+  >
+    <div v-for="list in category" :key="list.id" class="flex-child">
+      <v-card
+        width="350"
+        height="300"
+        class="overflow-y-auto mx-auto"
+        :class="{ dragging: dragging }"
+      >
+        <v-card-title class="link-title">{{ list.name }}</v-card-title>
+        <ul>
+          <li v-for="link in rtnLinks(list.ID)" :key="link.ID">
+            <a
+              v-if="link.category == list.ID"
+              :href="link.Link"
+              target="_blank"
+              >{{ link.Name }}</a
+            >
+          </li>
+        </ul>
+      </v-card>
+    </div>
   </draggable>
 </template>
 <script>
@@ -31,7 +40,8 @@ export default {
     return {
       category: [],
       links: [],
-      isExpand: false
+      isExpand: false,
+      dragging: false
     };
   },
   created() {
@@ -72,6 +82,15 @@ export default {
       });
       return linkList;
     }
+  },
+  watch: {
+    dragging: function(state) {
+      if (state) {
+        console.log("DRAGGING....");
+      } else {
+        console.log("Stopping......");
+      }
+    }
   }
 };
 </script>
@@ -94,5 +113,19 @@ ul,li{
 }
 a {
   text-decoration: none;
+}
+
+#flex-container{
+  display : flex;
+  flex-wrap : wrap;
+  justify-content : space-between;
+  .flex-child{
+    margin-bottom 20px;
+  }
+}
+
+.dragging{
+  height : 50px !important;
+  overflow-y: hidden !important;
 }
 </style>

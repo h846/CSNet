@@ -7,7 +7,7 @@
       <!-- Confirm Current Announce Message-->
       <v-dialog v-model="currentImportDialog" max-width="750">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="primary" outlined v-bind="attrs" v-on="on">
+          <v-btn color="warning" outlined v-bind="attrs" v-on="on">
             現在のメッセージ
           </v-btn>
         </template>
@@ -25,7 +25,7 @@
         class="mt-3"
         block
         :loading="loading"
-        color="primary"
+        color="warning"
         @click="dialog = true"
         >投 稿</v-btn
       >

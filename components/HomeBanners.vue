@@ -2,7 +2,8 @@
   <v-sheet class="my-5 pa-5" min-width="450" elevation="3" rounded>
     <v-row>
       <v-col
-        md="3"
+        lg="3"
+        md="4"
         cols="6"
         v-for="banner in banners"
         :key="banner.id"

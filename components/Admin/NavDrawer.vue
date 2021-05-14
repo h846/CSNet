@@ -10,7 +10,7 @@
     <v-list>
       <v-list-item v-for="[icon, name, url] in links" :key="icon" link>
         <v-list-item-icon>
-          <v-icon color="primary">{{ icon }}</v-icon>
+          <v-icon color="accent">{{ icon }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
