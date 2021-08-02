@@ -6,21 +6,28 @@
         <v-card width="500">
           <v-subheader>ツールリンク編集</v-subheader>
 
-          <v-list shaped>
+          <v-list rounded>
             <v-list-item-group color="primary">
-              <v-list-item v-for="item in category" :key="item.ID" width="100%">
-                <v-list-item-icon>
-                  <v-icon>mdi-arrow-right-drop-circle-outline</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>
-                    <nuxt-link :to="`toollinks/${item.name}?catid=${item.ID}`">
-                      {{ item.name }}
-                    </nuxt-link>
-                  </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-
+              <draggable v-model="category" :animation="200" @end="sortEnd()">
+                <v-list-item
+                  v-for="item in category"
+                  :key="item.ID"
+                  width="100%"
+                >
+                  <v-list-item-icon>
+                    <v-icon>mdi-arrow-right-drop-circle-outline</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      <nuxt-link
+                        :to="`toollinks/${item.name}?catid=${item.ID}`"
+                      >
+                        {{ item.name }}
+                      </nuxt-link>
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </draggable>
               <v-divider></v-divider>
 
               <v-list-item @click.stop="addDialog = true">
@@ -67,6 +74,7 @@
 </template>
 <script>
 import axios from "axios";
+import draggable from "vuedraggable";
 
 import Loader from "@/components/loader";
 import CatAddDialog from "@/components/Admin/CatAddDialog";
@@ -77,6 +85,7 @@ export default {
     LinkListDialog,
     CatAddDialog,
     Loader,
+    draggable
   },
   data() {
     return {
@@ -84,11 +93,32 @@ export default {
       category: [],
       links: [],
       dialog: false,
-      addDialog: false,
+      addDialog: false
     };
   },
   methods: {
-    addCat: function () {},
+    sortEnd() {
+      this.category = this.category.map((val, index) => {
+        val.position = index;
+        return val;
+      });
+
+      let sql = "UPDATE `category` SET `position` = CASE ";
+
+      this.category.map(val => {
+        sql += ` WHEN ID =  ${val.ID} THEN ${val.position}`;
+      });
+
+      sql += " END";
+
+      console.log(sql);
+
+      axios.post("http://lejnet/API/accdb", {
+        db: "CSNet/dataCenter/DB/Tool/tools_home.accdb",
+        sql: sql
+      });
+      console.log(this.category);
+    }
   },
   created() {
     axios
@@ -100,16 +130,16 @@ export default {
         axios.get(
           "http://lejnet/API/accdb?db=CSNet/dataCenter/DB/Tool/tools_home.mdb&table=tool" +
             `&date=${new Date().getTime()}`
-        ),
+        )
       ])
       .then(
         axios.spread((res1, res2) => {
-          this.category = res1.data;
+          this.category = _.sortBy(res1.data, "position");
           this.links = res2.data;
           this.loading = false;
         })
       );
-  },
+  }
 };
 </script>
 <style lang="stylus" scoped></style>

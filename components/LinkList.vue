@@ -1,18 +1,7 @@
 <template>
-  <draggable
-    v-model="category"
-    id="flex-container"
-    :animation="200"
-    @start="dragging = true"
-    @end="dragging = false"
-  >
-    <div v-for="list in category" :key="list.id" class="flex-child">
-      <v-card
-        width="350"
-        height="300"
-        class="overflow-y-auto mx-auto"
-        :class="{ dragging: dragging }"
-      >
+  <v-row>
+    <v-col cols="12" sm="6" md="4" v-for="list in category" :key="list.id">
+      <v-card min-width="250" height="300" class="overflow-y-auto mx-auto">
         <v-card-title class="link-title">{{ list.name }}</v-card-title>
         <ul>
           <li v-for="link in rtnLinks(list.ID)" :key="link.ID">
@@ -25,8 +14,8 @@
           </li>
         </ul>
       </v-card>
-    </div>
-  </draggable>
+    </v-col>
+  </v-row>
 </template>
 <script>
 import axios from "axios";
@@ -66,7 +55,7 @@ export default {
         ])
         .then(
           axios.spread((res1, res2) => {
-            this.category = res1.data;
+            this.category = _.sortBy(res1.data, "position");
             this.links = res2.data;
             console.log("link list loaded.");
           })
