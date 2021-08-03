@@ -29,8 +29,7 @@ export default {
     return {
       category: [],
       links: [],
-      isExpand: false,
-      dragging: false
+      isExpand: false
     };
   },
   created() {
@@ -69,16 +68,8 @@ export default {
       let linkList = this.links.filter(val => {
         return catID == val.category;
       });
+      linkList = _.sortBy(linkList, "position");
       return linkList;
-    }
-  },
-  watch: {
-    dragging: function(state) {
-      if (state) {
-        console.log("DRAGGING....");
-      } else {
-        console.log("Stopping......");
-      }
     }
   }
 };
@@ -111,10 +102,5 @@ a {
   .flex-child{
     margin-bottom 20px;
   }
-}
-
-.dragging{
-  height : 50px !important;
-  overflow-y: hidden !important;
 }
 </style>

@@ -103,20 +103,17 @@ export default {
         return val;
       });
 
-      let sql = "UPDATE `category` SET `position` = CASE ";
+      for (const index in this.category) {
+        let [position, id] = [
+          this.category[index].position,
+          this.category[index].ID
+        ];
+        axios.post("http://lejnet/API/accdb", {
+          db: "CSNet/dataCenter/DB/Tool/tools_home.mdb",
+          sql: `UPDATE \`category\` SET \`position\` = ${position} WHERE \`ID\` = ${id}`
+        });
+      }
 
-      this.category.map(val => {
-        sql += ` WHEN ID =  ${val.ID} THEN ${val.position}`;
-      });
-
-      sql += " END";
-
-      console.log(sql);
-
-      axios.post("http://lejnet/API/accdb", {
-        db: "CSNet/dataCenter/DB/Tool/tools_home.accdb",
-        sql: sql
-      });
       console.log(this.category);
     }
   },

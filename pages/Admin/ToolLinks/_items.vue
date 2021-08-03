@@ -23,30 +23,33 @@
         </v-col>
       </v-row>
 
-      <ul>
-        <li v-for="item in itemList" :key="item.ID">
-          <v-row align="center">
-            <v-col cols="8">
-              <v-checkbox
-                v-model="checkedItems"
-                :label="item.Name"
-                :value="item.ID"
-              ></v-checkbox>
-            </v-col>
-            <v-col cols="2">
-              <v-btn :href="item.Link" target="_blank" color="primary" text
-                ><v-icon left>mdi-open-in-new</v-icon> LINK</v-btn
-              >
-            </v-col>
-            <v-col cols="2">
+      <v-list rounded>
+        <v-list-item-group>
+          <draggable v-model="data" :animation="200" @end="sortEnd()">
+            <v-list-item v-for="item in data" :key="item.ID">
+              <v-list-item-content>
+                <v-checkbox
+                  v-model="checkedItems"
+                  :label="item.Name"
+                  :value="item.ID"
+                  dense
+                  hide-details
+                ></v-checkbox>
+              </v-list-item-content>
+              <v-btn :href="item.Link" target="_blank" color="primary" text>
+                <v-icon left>mdi-open-in-new</v-icon>
+                LINK
+              </v-btn>
               <v-btn @click="editItem(item.ID)" color="blue-grey" text>
                 <v-icon left>mdi-pencil-outline</v-icon>
                 編集
               </v-btn>
-            </v-col>
-          </v-row>
-        </li>
-      </ul>
+            </v-list-item>
+          </draggable>
+        </v-list-item-group>
+      </v-list>
+
+      <v-divider class="my-10"></v-divider>
     </v-sheet>
     <!-- Delete Dialog -->
     <itemDelDialog
@@ -79,16 +82,19 @@ import itemDelDialog from "@/components/Admin/ItemDelDialog";
 import itemEditDialog from "@/components/Admin/ItemEditDialog";
 
 import axios from "axios";
+import draggable from "vuedraggable";
+
 export default {
   components: {
     itemAddDialog,
     itemDelDialog,
     itemEditDialog,
-    Loader
+    Loader,
+    draggable
   },
   data() {
     return {
-      dbdata: [],
+      data: [],
       catid: this.$route.query.catid,
       checkedItems: [],
       btnDisable: true,
@@ -102,13 +108,6 @@ export default {
   },
   created() {
     this.getItemData();
-  },
-  computed: {
-    itemList: function() {
-      return this.dbdata.filter(item => {
-        return item.category == this.catid;
-      });
-    }
   },
   watch: {
     checkedItems: function(val) {
@@ -130,18 +129,37 @@ export default {
           }
         })
         .then(res => {
-          this.dbdata = res.data;
+          let data = _.sortBy(res.data, "position");
+          this.data = data.filter(item => {
+            return item.category == this.catid;
+          });
+          console.log(this.data);
           this.loading = false;
         });
     },
     editItem(itemID) {
-      this.link = this.dbdata.filter(val => val.ID == itemID);
-      console.log(this.link, this.link[0].Name);
+      this.link = this.data.filter(val => val.ID == itemID);
+      //console.log(this.link, this.link[0].Name);
       this.editDialog = true;
     },
     itemUpdated() {
       this.getItemData();
       this.edSnackbar = true;
+    },
+    sortEnd() {
+      console.log(this.data);
+      this.data = this.data.map((val, index) => {
+        val.position = index;
+        return val;
+      });
+
+      for (const index in this.data) {
+        let [position, id] = [this.data[index].position, this.data[index].ID];
+        axios.post("http://lejnet/API/accdb", {
+          db: "CSNet/dataCenter/DB/Tool/tools_home.mdb",
+          sql: `UPDATE \`tool\` SET \`position\` = ${position} WHERE \`ID\` = ${id}`
+        });
+      }
     }
   }
 };
