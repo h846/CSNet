@@ -32,7 +32,10 @@ export default {
       rel: 'icon',
       type: 'image/x-icon',
       href: 'http://lejnet/CSNet_dev/test/favicon.ico'
-    }]
+    }],
+    script: [{
+      src: '//polyfill.io/v2/polyfill.min.js'
+    }],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -42,11 +45,9 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [{
-      src: '~plugins/quill.js',
-      ssr: false
-    },
-    '~/plugins/lodash.js'
-  ],
+    src: '~plugins/quill.js',
+    ssr: false
+  }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -86,5 +87,7 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {}
+  build: {
+    transpile: ['vuetify'],
+  }
 }

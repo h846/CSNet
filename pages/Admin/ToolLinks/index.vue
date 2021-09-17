@@ -131,7 +131,14 @@ export default {
       ])
       .then(
         axios.spread((res1, res2) => {
-          this.category = _.sortBy(res1.data, "position");
+          // Sorting
+          this.category = res1.data.sort(function(a, b) {
+            if (a.position > b.position) {
+              return 1;
+            } else {
+              return -1;
+            }
+          });
           this.links = res2.data;
           this.loading = false;
         })

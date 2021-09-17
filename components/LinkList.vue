@@ -54,7 +54,14 @@ export default {
         ])
         .then(
           axios.spread((res1, res2) => {
-            this.category = _.sortBy(res1.data, "position");
+            // Sorting
+            this.category = res1.data.sort(function(a, b) {
+              if (a.position > b.position) {
+                return 1;
+              } else {
+                return -1;
+              }
+            });
             this.links = res2.data;
             console.log("link list loaded.");
           })
@@ -68,7 +75,14 @@ export default {
       let linkList = this.links.filter(val => {
         return catID == val.category;
       });
-      linkList = _.sortBy(linkList, "position");
+      // Sorting
+      linkList.sort(function(a, b) {
+        if (a.position > b.position) {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
       return linkList;
     }
   }

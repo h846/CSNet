@@ -129,7 +129,14 @@ export default {
           }
         })
         .then(res => {
-          let data = _.sortBy(res.data, "position");
+          // Sorting
+          let data = res.data.sort(function(a, b) {
+            if (a.position > b.position) {
+              return 1;
+            } else {
+              return -1;
+            }
+          });
           this.data = data.filter(item => {
             return item.category == this.catid;
           });
