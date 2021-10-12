@@ -8,11 +8,11 @@
 
 <script>
 export default {
-  name: "App",
+  name: "App"
 };
 </script>
 <style lamg="stylus">
-@import url("https://fonts.googleapis.com/css2?family=Sawarabi+Gothic&family=Roboto+Mono&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap");
 
 * {
   margin: 0;
@@ -22,6 +22,8 @@ export default {
 }
 
 #inspire {
-  font-family: "Sawarabi Gothic", sans-serif;
+  font-family: "Noto Sans JP", serif;
+  font-family: "Helvetica Neue", "Helvetica", "Hiragino Sans",
+    "Hiragino Kaku Gothic ProN", "Arial", "Yu Gothic", "Meiryo", sans-serif;
 }
 </style>

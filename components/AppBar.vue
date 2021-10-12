@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar dense class="amber darken-4" dark>
+  <v-app-bar dense class="white">
     <v-toolbar-title>CS-Net</v-toolbar-title>
 
     <v-tabs optional>
@@ -10,9 +10,8 @@
         ユーザー設定
       </v-tab>
     </v-tabs>
-    <!-- 実装する -->
     <v-toolbar-title>{{ greeting }}</v-toolbar-title>
-    <v-btn v-if="isAdmin" to="Admin" nuxt color="yellow lighten-4" outlined
+    <v-btn v-if="isAdmin" to="Admin" nuxt color="blue darken-4" outlined
       >ADMIN</v-btn
     >
   </v-app-bar>

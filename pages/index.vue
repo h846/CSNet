@@ -12,7 +12,7 @@
             elevation="3"
             height="65%"
           >
-            <h1>本日のお知らせ</h1>
+            <h1 class="title-label text-center">本日のお知らせ</h1>
             <div id="announce" v-html="announce"></div>
           </v-sheet>
           <!-- Import Message-->
@@ -22,7 +22,7 @@
             elevation="3"
             height="35%"
           >
-            <h1>重要事項</h1>
+            <h1 class="title-label text-center">重要事項</h1>
             <div id="importMsg" v-html="importMsg"></div>
           </v-sheet>
         </v-col>
@@ -267,7 +267,6 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-deep-orange = #FF5722;
 
 #announce /deep/, #importMsg /deep/{
   padding: 20px;
@@ -287,22 +286,11 @@ deep-orange = #FF5722;
 }
 
 .title-label {
-  position: relative;
-  padding: 0 0.5rem;
-  background: deep-orange;
-  color: white;
-  font-size: 1rem;
-  border-radius: 2px;
-
-  &:before {
-    position: absolute;
-    content: '';
-    top: 100%;
-    left: 0;
-    border: none;
-    border-bottom: solid 6px transparent;
-    border-right: solid 10px #BF360C;
-  }
+  color:#1976D2;
+  font-size: 1.3rem;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+  padding: 2px 1px;
+  border-bottom: 2px solid #0D47A1;
 }
 
 .csr_info {
