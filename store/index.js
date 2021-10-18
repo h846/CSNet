@@ -1,7 +1,6 @@
 import axios from 'axios'
 
 export const state = () => ({
-  message: 'Hello World!!',
   announce: '',
   importMsg: '',
   userData: {

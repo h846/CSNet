@@ -12,21 +12,23 @@ export default {
 
   head() {
     return {
-      title: "Admin Page",
+      title: "Admin Page"
     };
   },
 
   components: {
-    NavDrawer,
+    NavDrawer
   },
 
   created() {
     //管理者か判定。直リンクを阻止。
+    /*
     let isAdmin = this.$store.state.isAdmin;
     if (!isAdmin) {
       this.$router.replace("/");
     }
-  },
+    */
+  }
 };
 </script>
 <style lang="stylus" scoped></style>

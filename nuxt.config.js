@@ -29,9 +29,17 @@ export default {
       }
     ],
     link: [{
-      rel: 'icon',
-      type: 'image/x-icon',
-      href: 'http://lejnet/CSNet_dev/test/favicon.ico'
+      rel: 'preconnect',
+      href: 'https://fonts.googleapis.com'
+    }],
+    link: [{
+      rel: 'preconnect',
+      href: 'https://fonts.gstatic.com',
+      crossorigin: ''
+    }],
+    link: [{
+      rel: 'stylesheet',
+      href: 'https://fonts.googleapis.com/css2?family=Sawarabi+Gothic&display=swap',
     }],
     script: [{
       src: '//polyfill.io/v2/polyfill.min.js'
@@ -89,8 +97,6 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     transpile: ['vuetify'],
-
-
   }
 
 }

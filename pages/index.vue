@@ -12,7 +12,7 @@
             elevation="3"
             height="65%"
           >
-            <h1 class="title-label text-center">本日のお知らせ</h1>
+            <div class="title-label text-center">本日のお知らせ</div>
             <div id="announce" v-html="announce"></div>
           </v-sheet>
           <!-- Import Message-->
@@ -22,7 +22,7 @@
             elevation="3"
             height="35%"
           >
-            <h1 class="title-label text-center">重要事項</h1>
+            <div class="title-label text-center">重要事項</div>
             <div id="importMsg" v-html="importMsg"></div>
           </v-sheet>
         </v-col>
