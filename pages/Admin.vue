@@ -22,12 +22,10 @@ export default {
 
   created() {
     //管理者か判定。直リンクを阻止。
-    /*
     let isAdmin = this.$store.state.isAdmin;
     if (!isAdmin) {
       this.$router.replace("/");
     }
-    */
   }
 };
 </script>
