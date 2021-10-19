@@ -8,6 +8,7 @@ export const state = () => ({
     name: ''
   },
   admins: [
+    "tyoshid",
     "sehara",
     "hkinjo",
     "mtanaka",
@@ -25,7 +26,7 @@ export const state = () => ({
     "nsuzuki",
     "snishik",
     "hmori",
-    "" //←誰でもアクセス。本番環境では削除する
+    //"" //←誰でもアクセス。本番環境では削除する
   ],
   isAdmin: false
 })
