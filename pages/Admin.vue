@@ -5,28 +5,25 @@
   </div>
 </template>
 <script>
-import NavDrawer from "@/components/Admin/NavDrawer";
+import NavDrawer from '@/components/Admin/NavDrawer';
 
 export default {
-  name: "AdminPage",
+  name: 'AdminPage',
 
   head() {
     return {
-      title: "Admin Page"
+      title: 'Admin Page',
     };
   },
-
   components: {
-    NavDrawer
+    NavDrawer,
   },
-
-  created() {
-    //管理者か判定。直リンクを阻止。
-    let isAdmin = this.$store.state.isAdmin;
-    if (!isAdmin) {
-      this.$router.replace("/");
+  mounted() {
+    if (this.$store.state.isAdmin == false) {
+      this.$store.commit('setAdmin');
+      this.$router.push('/');
     }
-  }
+  },
 };
 </script>
 <style lang="stylus" scoped></style>

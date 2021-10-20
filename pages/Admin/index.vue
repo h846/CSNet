@@ -21,12 +21,7 @@
       <v-sheet>
         <vue-editor v-model="content" />
       </v-sheet>
-      <v-btn
-        class="mt-3"
-        block
-        :loading="loading"
-        color="primary"
-        @click="dialog = true"
+      <v-btn class="mt-3" block :loading="loading" color="primary" @click="dialog = true"
         >投 稿</v-btn
       >
     </client-only>
@@ -42,12 +37,7 @@
       </v-card>
     </v-dialog>
     <!-- Snack Bar -->
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      color="success"
-      elevation="2"
-    >
+    <v-snackbar v-model="snackbar" :timeout="timeout" color="success" elevation="2">
       更新完了しました！
       <template v-slot:action="{ attrs }">
         <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
@@ -58,17 +48,17 @@
   </v-container>
 </template>
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
   data: () => ({
-    content: "",
+    content: '',
     loading: false,
     snackbar: false,
     dialog: false,
     currentAnnounce: false,
-    currentAnnounceMsg: "",
-    timeout: 3000
+    currentAnnounceMsg: '',
+    timeout: 3000,
   }),
   created() {
     this.content = this.$store.state.announce;
@@ -79,9 +69,9 @@ export default {
       this.loading = true;
       this.dialog = false;
       axios
-        .post("http://lejnet/API/json", {
-          file: "csnet/announce.json",
-          data: this.content
+        .post('http://lejnet/API/json', {
+          file: 'csnet/announce.json',
+          data: this.content,
         })
         .then(
           function(res) {
@@ -89,12 +79,12 @@ export default {
             this.snackbar = true;
             var self = this;
             setTimeout(function() {
-              self.$router.push("/");
+              self.$router.push('/');
             }, 3000);
           }.bind(this)
         );
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="stylus" scoped>

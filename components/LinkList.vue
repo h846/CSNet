@@ -63,7 +63,6 @@ export default {
               }
             });
             this.links = res2.data;
-            console.log("link list loaded.");
           })
         )
         .catch(err => {

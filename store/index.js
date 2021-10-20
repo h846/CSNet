@@ -26,7 +26,7 @@ export const state = () => ({
     "nsuzuki",
     "snishik",
     "hmori",
-    //"" //←誰でもアクセス。本番環境では削除する
+    "" //←誰でもアクセス。本番環境では削除する
   ],
   isAdmin: false
 })
@@ -35,9 +35,8 @@ export const mutations = {
   setUserData: function (state, data) {
     state.userData.id = data.id;
     state.userData.name = data.name;
-  },
-  setIsAdmin: function (state, isAdmin) {
-    state.isAdmin = isAdmin;
+    //管理者判定
+    //state.isAdmin = state.admins.some(val => val == data.id);
   },
   setAnnounce: function (state, announce) {
     //リストの先頭にある最新のデータを取得
@@ -45,6 +44,9 @@ export const mutations = {
   },
   setImportMsg: function (state, data) {
     state.importMsg = data.list[0].data;
+  },
+  setAdmin: function (state) {
+    state.isAdmin = true;
   }
 }
 
@@ -52,14 +54,8 @@ export const actions = {
   getUserData: async function ({
     commit
   }) {
-    await axios
-      .get('http://lejnet/API/src/user/')
-      .then(res => {
-        commit('setUserData', res.data)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    let res = await axios.get('http://lejnet/API/src/user/');
+    commit('setUserData', res.data);
   },
   getAnnounceData: async function ({
     commit
