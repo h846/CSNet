@@ -12,8 +12,6 @@ export default {
 };
 </script>
 <style lamg="stylus">
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap");
-
 * {
   margin: 0;
   padding: 0;
@@ -22,8 +20,8 @@ export default {
 }
 
 #inspire {
-  font-family: "Noto Sans JP", serif;
   font-family: "Helvetica Neue", "Helvetica", "Hiragino Sans",
     "Hiragino Kaku Gothic ProN", "Arial", "Yu Gothic", "Meiryo", sans-serif;
+  font-family: "Kosugi", sans-serif;
 }
 </style>

@@ -45,6 +45,9 @@ export const mutations = {
   },
   setImportMsg: function (state, data) {
     state.importMsg = data.list[0].data;
+  },
+  setAdmin: function (state) {
+    state.isAdmin = true;
   }
 }
 

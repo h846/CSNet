@@ -1,28 +1,18 @@
 <template>
   <section>
     <Loader :loading="loading" />
-    <AppBar :isAdmin="isAdmin" />
+    <AppBar />
     <v-container class="px-5">
       <v-row>
         <!-- Announcement -->
         <v-col cols="12" sm="7">
-          <v-sheet
-            class="sheet overflow-y-auto"
-            :rounded="true"
-            elevation="3"
-            height="65%"
-          >
-            <h1 class="title-label text-center">本日のお知らせ</h1>
+          <v-sheet class="sheet overflow-y-auto" :rounded="true" elevation="3" height="65%">
+            <p class="title-label text-center">本日のお知らせ</p>
             <div id="announce" v-html="announce"></div>
           </v-sheet>
           <!-- Import Message-->
-          <v-sheet
-            class="sheet overflow-y-auto mt-3"
-            :rounded="true"
-            elevation="3"
-            height="35%"
-          >
-            <h1 class="title-label text-center">重要事項</h1>
+          <v-sheet class="sheet overflow-y-auto mt-3" :rounded="true" elevation="3" height="35%">
+            <p class="title-label text-center">重要事項</p>
             <div id="importMsg" v-html="importMsg"></div>
           </v-sheet>
         </v-col>
@@ -46,11 +36,13 @@
               <!-- CSR Info -->
               <v-card-subtitle class="csr_info">
                 <p class="gc-source">{{ GC.source }}</p>
-                <span class="mr-2">{{ GC.dept }}</span>
-                <span class="gc-operator">{{ GC.operator }}</span>
+                <div class="amber--text text--darken-4 ">
+                  <span class="mr-2">{{ GC.dept }}</span>
+                  <span>{{ GC.operator }}</span>
+                </div>
               </v-card-subtitle>
               <!-- Comment -->
-              <v-card-text class="gc-comment">{{ GC.comment }}</v-card-text>
+              <v-card-text class="font-weight-black">{{ GC.comment }}</v-card-text>
             </v-card>
             <!-- Call Forecast -->
             <v-card class="mt-5">
@@ -67,27 +59,21 @@
                 <v-col cols="12" sm="6" class="pa-0">
                   <div class="ml-8 mb-3">
                     <p class="ma-0">入電数</p>
-                    <span class="font-weight-bold"
-                      >{{ Fcst.yesterday.actual }}本
-                    </span>
+                    <span class="font-weight-bold">{{ Fcst.yesterday.actual }}本 </span>
                     <span>(予測の{{ Fcst.yesterday.FcstRate }}%)</span>
                   </div>
                 </v-col>
                 <v-col cols="12" sm="6" class="pa-0">
                   <div class="ml-8 mb-3">
                     <p class="ma-0">放棄数</p>
-                    <span class="font-weight-bold"
-                      >{{ Fcst.yesterday.abd }}本</span
-                    >
+                    <span class="font-weight-bold">{{ Fcst.yesterday.abd }}本</span>
                     <span>(入電の{{ Fcst.yesterday.AbdRate }}%)</span>
                   </div>
                 </v-col>
                 <v-col cols="12" sm="6" class="pa-0">
                   <div class="ml-8 mb-3">
                     <p class="ma-0">着信できなかった本数</p>
-                    <span class="font-weight-bold"
-                      >{{ Fcst.yesterday["裏abd"] }}本</span
-                    >
+                    <span class="font-weight-bold">{{ Fcst.yesterday['裏abd'] }}本</span>
                   </div>
                 </v-col>
               </v-row>
@@ -103,18 +89,18 @@
   </section>
 </template>
 <script>
-import Loader from "@/components/loader";
-import AppBar from "@/components/AppBar";
-import Banners from "@/components/HomeBanners";
-import LinkList from "@/components/LinkList";
+import Loader from '@/components/loader';
+import AppBar from '@/components/AppBar';
+import Banners from '@/components/HomeBanners';
+import LinkList from '@/components/LinkList';
 
-import axios from "axios";
+import axios from 'axios';
 export default {
-  name: "CSNetMainPage",
+  name: 'CSNetMainPage',
 
   head() {
     return {
-      title: "Home"
+      title: 'Home',
     };
   },
 
@@ -122,7 +108,7 @@ export default {
     AppBar,
     Banners,
     LinkList,
-    Loader
+    Loader,
   },
 
   data: () => ({
@@ -130,22 +116,22 @@ export default {
     isAdmin: false,
     //Good Comment
     GC: {
-      source: "",
-      dept: "",
-      operator: "",
-      comment: ""
+      source: '',
+      dept: '',
+      operator: '',
+      comment: '',
     },
     Fcst: {
-      today: "",
+      today: '',
       yesterday: {
         Fcst: 0,
         actual: 0,
         abd: 0,
         裏abd: 0,
         FcstRate: null,
-        AbdRate: null
-      }
-    }
+        AbdRate: null,
+      },
+    },
   }),
   methods: {
     //当日判定
@@ -158,8 +144,8 @@ export default {
     },
     //HTMLタグ除去
     delHTMLtag: function(str) {
-      return str.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, "");
-    }
+      return str.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '');
+    },
   },
   computed: {
     announce: function() {
@@ -167,37 +153,33 @@ export default {
     },
     importMsg: function() {
       return this.$store.state.importMsg;
-    }
+    },
   },
   created() {
     //全体周知メッセージ取得
-    this.$store.dispatch("getAnnounceData");
+    this.$store.dispatch('getAnnounceData');
     // 重要メッセージ取得
-    this.$store.dispatch("getImportMsgData");
+    this.$store.dispatch('getImportMsgData');
     //管理者判定
     //ユーザーデータ取得
-    this.$store.dispatch("getUserData");
-    let userID = this.$store.state.userData.id;
-    let admins = this.$store.state.admins;
-    this.isAdmin = admins.some(val => val == userID);
-    this.$store.commit("setIsAdmin", this.isAdmin);
+    this.$store.dispatch('getUserData');
     //情報取得
     axios
       .all([
         //グッドコメント
-        axios.get("http://lejnet/API/accdb", {
+        axios.get('http://lejnet/API/accdb', {
           params: {
-            db: "CSNet/common/HotVoice/data/DB/data.mdb",
-            table: "good_comment_csnethome"
-          }
+            db: 'CSNet/common/HotVoice/data/DB/data.mdb',
+            table: 'good_comment_csnethome',
+          },
         }),
         //入電予測
-        axios.get("http://lejnet/API/accdb", {
+        axios.get('http://lejnet/API/accdb', {
           params: {
-            db: "CSNet/dataCenter/DB/Fcst/call/call_Result.accdb",
-            table: "data"
-          }
-        })
+            db: 'CSNet/dataCenter/DB/Fcst/call/call_Result.accdb',
+            table: 'data',
+          },
+        }),
       ])
       .then(
         axios.spread((goodComment, callForecast) => {
@@ -207,37 +189,35 @@ export default {
             return this.areSameDate(gcDate, new Date());
           });
           //htmlタグを除去して割り当て
-          this.GC.source = this.delHTMLtag(todaysComment["出所"]);
-          this.GC.dept = this.delHTMLtag(todaysComment["部署"]);
-          this.GC.operator = this.delHTMLtag(todaysComment["csr_name"]);
-          this.GC.comment = this.delHTMLtag(todaysComment["comment"]);
+          this.GC.source = this.delHTMLtag(todaysComment['出所']);
+          this.GC.dept = this.delHTMLtag(todaysComment['部署']);
+          this.GC.operator = this.delHTMLtag(todaysComment['csr_name']);
+          this.GC.comment = this.delHTMLtag(todaysComment['comment']);
           // 入電予測
           let callFcst = callForecast.data.find(val => {
-            let fcstDate = new Date(val["ｄａｔｅ"]); //全角　(；ﾟДﾟ)
+            let fcstDate = new Date(val['ｄａｔｅ']); //全角　(；ﾟДﾟ)
             return this.areSameDate(fcstDate, new Date());
           });
-          this.Fcst.today = callFcst["Fcst"];
+          this.Fcst.today = callFcst['Fcst'];
           //昨日の入電結果
           let yesterdayResult = callForecast.data.find(val => {
-            let fcstDate = new Date(val["ｄａｔｅ"]); //全角　(；ﾟДﾟ)
+            let fcstDate = new Date(val['ｄａｔｅ']); //全角　(；ﾟДﾟ)
             let yesterday = new Date();
             yesterday.setDate(yesterday.getDate() - 1);
 
             return this.areSameDate(fcstDate, yesterday);
           });
-          this.Fcst.yesterday["Fcst"] = yesterdayResult["Fcst"];
-          this.Fcst.yesterday["actual"] = yesterdayResult["actual"];
-          this.Fcst.yesterday["abd"] = yesterdayResult["abd"];
-          this.Fcst.yesterday["裏abd"] = yesterdayResult["裏abd"];
+          this.Fcst.yesterday['Fcst'] = yesterdayResult['Fcst'];
+          this.Fcst.yesterday['actual'] = yesterdayResult['actual'];
+          this.Fcst.yesterday['abd'] = yesterdayResult['abd'];
+          this.Fcst.yesterday['裏abd'] = yesterdayResult['裏abd'];
           //予測/実績 入電比率
-          let yesterdayFcst = parseInt(this.Fcst.yesterday["Fcst"]);
-          let yesterdayActual = parseInt(this.Fcst.yesterday["actual"]);
-          let yesterdayAbd = parseInt(this.Fcst.yesterday["abd"]);
-          this.Fcst.yesterday["FcstRate"] = Math.round(
-            (yesterdayActual / yesterdayFcst) * 100
-          );
+          let yesterdayFcst = parseInt(this.Fcst.yesterday['Fcst']);
+          let yesterdayActual = parseInt(this.Fcst.yesterday['actual']);
+          let yesterdayAbd = parseInt(this.Fcst.yesterday['abd']);
+          this.Fcst.yesterday['FcstRate'] = Math.round((yesterdayActual / yesterdayFcst) * 100);
           //放棄率
-          this.Fcst.yesterday["AbdRate"] =
+          this.Fcst.yesterday['AbdRate'] =
             Math.round((yesterdayAbd / yesterdayActual) * 10000) / 100;
 
           this.loading = false;
@@ -258,17 +238,17 @@ export default {
           console.log(error.request);
         } else {
           // Something happened in setting up the request that triggered an Error
-          console.log("Error", error.message);
+          console.log('Error', error.message);
         }
         console.log(error.config);
         this.loading = false;
       });
-  }
+  },
 };
 </script>
-<style lang="stylus" scoped>
-
-#announce /deep/, #importMsg /deep/{
+<style lang="stylus">
+#announce /deep/,
+#importMsg /deep/ {
   padding: 20px;
 
   p {
@@ -286,11 +266,11 @@ export default {
 }
 
 .title-label {
-  color:#1976D2;
+  color: #1976d2;
   font-size: 1.3rem;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
   padding: 2px 1px;
-  border-bottom: 2px solid #0D47A1;
+  border-bottom: 2px solid #0d47a1;
 }
 
 .csr_info {
@@ -304,6 +284,10 @@ export default {
 
   .gc-operator {
     font-weight: bold;
+  }
+
+  .gc-comment {
+
   }
 }
 
