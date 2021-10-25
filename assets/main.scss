@@ -1,13 +1,28 @@
+/*
 .bg {
   background-image: url('~@/assets/img/bg.jpg');
-  /* 画像を常に天地左右の中央に配置 */
+  // 画像を常に天地左右の中央に配置
   background-position: center center;
-  /* 画像をタイル状に繰り返し表示しない */
+  // 画像をタイル状に繰り返し表示しない
   background-repeat: no-repeat;
-  /* コンテンツの高さが画像の高さより大きい時、動かないように固定 */
+  // コンテンツの高さが画像の高さより大きい時、動かないように固定
   background-attachment: fixed;
-  /* 表示するコンテナの大きさに基づいて、背景画像を調整 */
+  // 表示するコンテナの大きさに基づいて、背景画像を調整
   background-size: cover;
-  /* 背景画像が読み込まれる前に表示される背景のカラー */
+  // 背景画像が読み込まれる前に表示される背景のカラー
   background-color: #0064b7;
+}
+*/
+.bg {
+  background: #6190e8; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to top,
+    #a7bfe8,
+    #6190e8
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to top,
+    #a7bfe8,
+    #6190e8
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }

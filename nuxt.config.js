@@ -34,12 +34,17 @@ export default {
     }],
     link: [{
       rel: 'preconnect',
-      href: 'https://fonts.gstatic.com',
-      crossorigin: ''
+      href: 'https://fonts.gstatic.com'
+    }],
+    link: [{
+      rel: 'icon',
+      type: 'image/x-icon',
+      href: 'https://fonts.googleapis.com/css2?family=Kosugi&display=swap'
     }],
     link: [{
       rel: 'stylesheet',
-      href: 'https://fonts.googleapis.com/css2?family=Sawarabi+Gothic&display=swap',
+      type: 'image/x-icon',
+      href: 'http://lejnet/CSNet/new/favicon.ico'
     }],
     script: [{
       src: '//polyfill.io/v2/polyfill.min.js'

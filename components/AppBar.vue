@@ -11,12 +11,12 @@
       </v-tab>
     </v-tabs>
     <v-toolbar-title>{{ greeting }}</v-toolbar-title>
-    <v-btn v-if="isAdmin" to="Admin" nuxt color="blue darken-4" dark>ADMIN</v-btn>
+    <v-btn v-if="isAdmin" to="Admin" nuxt color="blue darken-4" outlined>ADMIN</v-btn>
   </v-app-bar>
 </template>
 <script>
 export default {
-  data: function() {
+  data() {
     return {
       isAdmin: this.$store.state.isAdmin,
     };
@@ -26,11 +26,11 @@ export default {
       let greet;
       let nowHour = new Date().getHours();
       if (nowHour >= 4 && nowHour < 11) {
-        greet = 'おはようございます、';
+        greet = 'おはようございます。';
       } else if (nowHour >= 11 && nowHour < 18) {
-        greet = 'こんにちは、';
+        greet = 'こんにちは。';
       } else if (nowHour >= 18 || (nowHour >= 0 && nowHour < 4)) {
-        greet = 'こんばんは、';
+        greet = 'こんばんは。';
       }
       let userName = this.$store.state.userData;
 

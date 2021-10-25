@@ -21,8 +21,8 @@ export default {
 }
 
 #inspire {
-  font-family: 'Helvetica Neue', 'Helvetica', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Arial',
-    'Yu Gothic', 'Meiryo', sans-serif;
-  font-family: 'Sawarabi Gothic';
+  font-family: "Helvetica Neue", "Helvetica", "Hiragino Sans",
+    "Hiragino Kaku Gothic ProN", "Arial", "Yu Gothic", "Meiryo", sans-serif;
+  font-family: "Kosugi", sans-serif;
 }
 </style>

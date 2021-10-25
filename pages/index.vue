@@ -1,18 +1,18 @@
 <template>
   <section>
     <Loader :loading="loading" />
-    <AppBar :isAdmin="isAdmin" />
+    <AppBar />
     <v-container class="px-5">
       <v-row>
         <!-- Announcement -->
         <v-col cols="12" sm="7">
           <v-sheet class="sheet overflow-y-auto" :rounded="true" elevation="3" height="65%">
-            <div class="title-label text-center">本日のお知らせ</div>
+            <p class="title-label text-center">本日のお知らせ</p>
             <div id="announce" v-html="announce"></div>
           </v-sheet>
           <!-- Import Message-->
           <v-sheet class="sheet overflow-y-auto mt-3" :rounded="true" elevation="3" height="35%">
-            <div class="title-label text-center">重要事項</div>
+            <p class="title-label text-center">重要事項</p>
             <div id="importMsg" v-html="importMsg"></div>
           </v-sheet>
         </v-col>
@@ -36,11 +36,13 @@
               <!-- CSR Info -->
               <v-card-subtitle class="csr_info">
                 <p class="gc-source">{{ GC.source }}</p>
-                <span class="mr-2">{{ GC.dept }}</span>
-                <span class="gc-operator">{{ GC.operator }}</span>
+                <div class="amber--text text--darken-4 ">
+                  <span class="mr-2">{{ GC.dept }}</span>
+                  <span>{{ GC.operator }}</span>
+                </div>
               </v-card-subtitle>
               <!-- Comment -->
-              <v-card-text class="gc-comment">{{ GC.comment }}</v-card-text>
+              <v-card-text class="font-weight-black">{{ GC.comment }}</v-card-text>
             </v-card>
             <!-- Call Forecast -->
             <v-card class="mt-5">
@@ -160,6 +162,9 @@ export default {
     this.$store.dispatch('getAnnounceData');
     // 重要メッセージ取得
     this.$store.dispatch('getImportMsgData');
+    //管理者判定
+    //ユーザーデータ取得
+    this.$store.dispatch('getUserData');
     //情報取得
     axios
       .all([
@@ -219,17 +224,31 @@ export default {
         })
       )
       .catch(error => {
-        console.log(error);
-      })
-      .finally(() => {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(error.response.data);
+          console.log(error.response.status); // 例：400
+          console.log(error.response.statusText); // Bad Request
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+        }
+        console.log(error.config);
         this.loading = false;
       });
   },
 };
 </script>
-<style lang="stylus" scoped>
-
-#announce /deep/, #importMsg /deep/{
+<style lang="stylus">
+#announce /deep/,
+#importMsg /deep/ {
   padding: 20px;
 
   p {
@@ -247,11 +266,11 @@ export default {
 }
 
 .title-label {
-  color:#1976D2;
+  color: #1976d2;
   font-size: 1.3rem;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
   padding: 2px 1px;
-  border-bottom: 2px solid #0D47A1;
+  border-bottom: 2px solid #0d47a1;
 }
 
 .csr_info {
@@ -265,6 +284,10 @@ export default {
 
   .gc-operator {
     font-weight: bold;
+  }
+
+  .gc-comment {
+
   }
 }
 
