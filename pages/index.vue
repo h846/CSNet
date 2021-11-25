@@ -83,7 +83,7 @@
       </v-row>
       <!-- -->
       <Banners />
-      <!-- Link List Start -->
+      <!-- Link List -->
       <LinkList />
     </v-container>
   </section>
@@ -162,9 +162,6 @@ export default {
     this.$store.dispatch('getAnnounceData');
     // 重要メッセージ取得
     this.$store.dispatch('getImportMsgData');
-    //管理者判定
-    //ユーザーデータ取得
-    this.$store.dispatch('getUserData');
     //情報取得
     axios
       .all([
