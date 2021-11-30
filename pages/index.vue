@@ -85,6 +85,7 @@
       <Banners />
       <!-- Link List -->
       <LinkList />
+      <PopUp />
     </v-container>
   </section>
 </template>
@@ -93,6 +94,7 @@ import Loader from '@/components/loader';
 import AppBar from '@/components/AppBar';
 import Banners from '@/components/HomeBanners';
 import LinkList from '@/components/LinkList';
+import PopUp from '@/components/popup.vue';
 
 import axios from 'axios';
 export default {
@@ -109,6 +111,7 @@ export default {
     Banners,
     LinkList,
     Loader,
+    PopUp,
   },
 
   data: () => ({
