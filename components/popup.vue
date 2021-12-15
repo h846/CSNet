@@ -1,6 +1,12 @@
 <template> </template>
 <script>
+import axios from 'axios';
 export default {
+  data() {
+    return {
+      popupMsg: '',
+    };
+  },
   mounted() {
     this.notify();
   },
@@ -26,6 +32,12 @@ export default {
       } else {
         Notification.requestPermission();
       }
+    },
+    getNewMsg: async function() {
+      //10分に1回新しいセッションに張り替える
+      this.popupMsg = await axios.get('http://lejnet/api/json/', { timeout: 600000 });
+      //自分自身をもう一度呼び出し
+      this.getNewMsg();
     },
   },
 };
