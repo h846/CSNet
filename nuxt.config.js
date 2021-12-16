@@ -13,7 +13,7 @@ export default {
     titleTemplate: '%s - CS-Net',
     title: 'CS-Net',
     htmlAttrs: {
-      lang: 'ja'
+      lang: 'en'
     },
     meta: [{
         charset: 'utf-8'
@@ -42,7 +42,7 @@ export default {
       href: 'https://fonts.googleapis.com/css2?family=Kosugi&display=swap'
     }],
     link: [{
-      rel: 'icon',
+      rel: 'stylesheet',
       type: 'image/x-icon',
       href: 'http://lejnet/CSNet/new/favicon.ico'
     }],

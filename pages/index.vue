@@ -8,7 +8,7 @@
         <v-col cols="12" sm="7">
           <v-sheet class="sheet overflow-y-auto" :rounded="true" elevation="3" height="65%">
             <p class="title-label text-center">本日のお知らせ</p>
-            <div id="announce" v-html="announceMsg"></div>
+            <div id="announce" v-html="announce"></div>
           </v-sheet>
           <!-- Import Message-->
           <v-sheet class="sheet overflow-y-auto mt-3" :rounded="true" elevation="3" height="35%">
@@ -85,7 +85,6 @@
       <Banners />
       <!-- Link List -->
       <LinkList />
-      <PopUp />
     </v-container>
   </section>
 </template>
@@ -94,7 +93,6 @@ import Loader from '@/components/loader';
 import AppBar from '@/components/AppBar';
 import Banners from '@/components/HomeBanners';
 import LinkList from '@/components/LinkList';
-import PopUp from '@/components/popup.vue';
 
 import axios from 'axios';
 export default {
@@ -111,11 +109,9 @@ export default {
     Banners,
     LinkList,
     Loader,
-    PopUp,
   },
 
   data: () => ({
-    announceMsg: '',
     loading: false,
     isAdmin: false,
     //Good Comment
@@ -152,27 +148,19 @@ export default {
     },
   },
   computed: {
-    announce: function() {},
+    announce: function() {
+      return this.$store.state.announce;
+    },
     importMsg: function() {
       return this.$store.state.importMsg;
     },
   },
   mounted() {
     this.loading = true;
-
-    axios
-      .get('http://lejnet/api/json', { file: 'csnet/announce.json' })
-      .then(res => {
-        this.announceMsg = res.data;
-      })
-      .catch(err => {
-        console.log('ERROR is ' + err.message);
-      });
     //ユーザー情報取得
     this.$store.dispatch('getUserData');
     //全体周知メッセージ取得
-    //this.$store.dispatch('getAnnounceData');
-
+    this.$store.dispatch('getAnnounceData');
     // 重要メッセージ取得
     this.$store.dispatch('getImportMsgData');
     //情報取得
