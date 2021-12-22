@@ -4,40 +4,46 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      popupMsg: '',
+      aryLen: 0,
+      notifyMsg: 'CS-Netに新しいお知らせがあります！',
+      options: {
+        body: '',
+        requireInteraction: true,
+      },
     };
   },
   mounted() {
-    this.notify();
+    //window.open('microsoft-edge:https://www.suzu6.net');
+    // ブラウザーが通知APIに対応しているかどうかをチェックしましょう
+    if (!('Notification' in window)) {
+      alert('このブラウザーはデスクトップ通知に対応していません。');
+    }
+    // 通知の許可が既に得られていなければ許可を得る
+    else if (Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
+    //1秒ごとにデータの更新状況をチェック
+    setInterval(async () => {
+      await this.notify();
+    }, 1000);
   },
   methods: {
-    notify: function() {
-      // ブラウザーが通知に対応しているかどうかをチェックしましょう
-      if (!('Notification' in window)) {
-        alert('このブラウザーはデスクトップ通知に対応していません。');
-      }
-      // 通知の許可が既に得られているかどうかをチェックしましょう
-      else if (Notification.permission === 'granted') {
-        // If it's okay let's create a notification
-        var notification = new Notification('こんにちは！');
-      }
-      // そうでなければ、ユーザーに許可を求める必要があります
-      else if (Notification.permission !== 'denied') {
-        Notification.requestPermission().then(function(permission) {
-          // ユーザーが許可したら、通知を作成しましょう
-          if (permission === 'granted') {
-            var notification = new Notification('こんにちは！');
-          }
-        });
-      } else {
-        Notification.requestPermission();
-      }
-    },
-    getNewMsg: async function() {
-      //10分に1回新しいセッションに張り替える
-      this.popupMsg = await axios.get('http://lejnet/api/json/', { timeout: 600000 });
-      //自分自身をもう一度呼び出し
-      this.getNewMsg();
+    notify: async function() {
+      await axios.get('http://lejnet/api/src/json/csnet/announce.json').then(res => {
+        if (this.aryLen < res.data.list.length && this.aryLen !== 0) {
+          //メッセージ本文
+          //this.options.body = res.data.list[0].data;
+          let notification = new Notification(this.notifyMsg);
+          notification.onclick = function(event) {
+            window.open();
+          };
+
+          //トップページのメッセージも更新。
+          this.$store.dispatch('setAnnounceData', res.data);
+          console.log(this.$store.state.announce);
+        }
+        this.aryLen = res.data.list.length;
+      });
     },
   },
 };

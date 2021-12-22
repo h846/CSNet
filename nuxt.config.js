@@ -42,7 +42,7 @@ export default {
       href: 'https://fonts.googleapis.com/css2?family=Kosugi&display=swap'
     }],
     link: [{
-      rel: 'stylesheet',
+      rel: 'icon',
       type: 'image/x-icon',
       href: 'http://lejnet/CSNet/new/favicon.ico'
     }],

@@ -41,6 +41,7 @@ export const mutations = {
   setAnnounce: function (state, announce) {
     //リストの先頭にある最新のデータを取得
     state.announce = announce.list[0].data;
+    console.log(announce.list[0].data)
   },
   setImportMsg: function (state, data) {
     state.importMsg = data.list[0].data;
@@ -56,6 +57,9 @@ export const actions = {
   }) {
     let res = await axios.get('http://lejnet/API/src/user/');
     commit('setUserData', res.data);
+  },
+  setAnnounceData: function({commit}, data){
+    commit('setAnnounce', data)
   },
   getAnnounceData: async function ({
     commit

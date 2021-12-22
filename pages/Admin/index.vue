@@ -69,7 +69,7 @@ export default {
       this.loading = true;
       this.dialog = false;
       axios
-        .post('http://lejnet/API/json', {
+        .put('http://lejnet/API/json', {
           file: 'csnet/announce.json',
           data: this.content,
         })
