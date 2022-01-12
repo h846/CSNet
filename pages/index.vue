@@ -6,12 +6,12 @@
       <v-row>
         <!-- Announcement -->
         <v-col cols="12" sm="7">
-          <v-sheet class="sheet overflow-y-auto" :rounded="true" elevation="3" height="65%">
+          <v-sheet class="sheet overflow-y-auto" :rounded="true" elevation="3" height="70%">
             <p class="title-label text-center">本日のお知らせ</p>
             <div id="announce" v-html="announce"></div>
           </v-sheet>
           <!-- Import Message-->
-          <v-sheet class="sheet overflow-y-auto mt-3" :rounded="true" elevation="3" height="35%">
+          <v-sheet class="sheet overflow-y-auto mt-3" :rounded="true" elevation="3" height="30%">
             <p class="title-label text-center">重要事項</p>
             <div id="importMsg" v-html="importMsg"></div>
           </v-sheet>
@@ -85,8 +85,8 @@
       <Banners />
       <!-- Link List -->
       <LinkList />
-      <!-- Popup Notification-->
-      <popup />
+      <!-- Popup Notification-
+      <popup />-->
     </v-container>
   </section>
 </template>
@@ -95,7 +95,7 @@ import Loader from '@/components/loader';
 import AppBar from '@/components/AppBar';
 import Banners from '@/components/HomeBanners';
 import LinkList from '@/components/LinkList';
-import popup from '@/components/popup.vue';
+//import popup from '@/components/popup.vue';
 
 import axios from 'axios';
 export default {
@@ -112,12 +112,12 @@ export default {
     Banners,
     LinkList,
     Loader,
-    popup,
   },
 
   data: () => ({
     loading: false,
     isAdmin: false,
+    aryLen: 0, //Announce Data array
     //Good Comment
     GC: {
       source: '',
@@ -150,6 +150,16 @@ export default {
     delHTMLtag: function(str) {
       return str.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '');
     },
+    getAnnounceData: async function() {
+      await axios.get('http://lejnet/api/src/json/csnet/announce.json').then(res => {
+        if (this.aryLen < res.data.list.length && this.aryLen !== 0) {
+          //トップページのメッセージを定期更新。
+          this.$store.dispatch('setAnnounceData', res.data);
+          console.log(this.$store.state.announce);
+        }
+        this.aryLen = res.data.list.length;
+      });
+    },
   },
   computed: {
     announce: function() {
@@ -165,6 +175,10 @@ export default {
     this.$store.dispatch('getUserData');
     //全体周知メッセージ取得
     this.$store.dispatch('getAnnounceData');
+    //定期的に最新データがないかチェック
+    setInterval(async () => {
+      await this.getAnnounceData();
+    }, 1000);
     // 重要メッセージ取得
     this.$store.dispatch('getImportMsgData');
     //情報取得
@@ -235,6 +249,9 @@ export default {
 };
 </script>
 <style lang="stylus">
+.v-application p {
+    margin:0;
+}
 #announce /deep/,
 #importMsg /deep/ {
   padding: 20px;
@@ -255,10 +272,11 @@ export default {
 
 .title-label {
   color: #1976d2;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
   padding: 2px 1px;
-  border-bottom: 2px solid #0d47a1;
+  margin-bottom:5px;
+  //border-bottom: 2px solid #0d47a1;
 }
 
 .csr_info {
