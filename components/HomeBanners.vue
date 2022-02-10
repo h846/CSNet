@@ -29,9 +29,10 @@ export default {
         },
         {
           id: '2',
-          title: 'WANTED',
-          icon: 'mdi-account-clock',
-          url: 'http://lejnet/csnet/userdata/wanted/NewWantedIndex.hta',
+          title: 'MY IDEA',
+          icon: 'mdi-lightbulb-on-outline',
+          url:
+            'https://forms.office.com/Pages/ResponsePage.aspx?id=0mEqaAbJo0-lBUx809pVcqtqSy1TN2tJiIcXjaR9h8pUQ0JFVlFPNlczQTE0T1lLVTIyRTRBUVlaUy4u',
         },
         {
           id: '3',
