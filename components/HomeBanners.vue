@@ -25,7 +25,8 @@ export default {
           id: '1',
           title: '強化週間',
           icon: 'mdi-arm-flex',
-          url: 'http://lejnet/csnet/SALES/vacation_request/VRCSR.hta',
+          //url: 'http://lejnet/csnet/SALES/vacation_request/VRCSR.hta',
+          url: 'http://lejnet/csnet/Tool/VRCSR.hta',
         },
         {
           id: '2',
@@ -38,7 +39,8 @@ export default {
           id: '3',
           title: 'アパレル検定',
           icon: 'mdi-hanger',
-          url: 'http://lejnet/csnet/userdata/apparel/apaken_2019.hta',
+          //url: 'http://lejnet/csnet/userdata/apparel/apaken_2019.hta',
+          url: 'http://lejnet/csnet/Tool/apaken.hta',
         },
         {
           id: '4',
