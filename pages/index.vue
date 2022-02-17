@@ -36,7 +36,7 @@
               <!-- CSR Info -->
               <v-card-subtitle class="csr_info">
                 <p class="gc-source">{{ GC.source }}</p>
-                <div class="amber--text text--darken-4 ">
+                <div class="amber--text text--darken-4">
                   <span class="mr-2">{{ GC.dept }}</span>
                   <span>{{ GC.operator }}</span>
                 </div>
@@ -83,10 +83,10 @@
       </v-row>
       <!-- -->
       <Banners />
+      <!-- Search Dialog -->
+      <ToolSearch />
       <!-- Link List -->
       <LinkList />
-      <!-- Popup Notification-
-      <popup />-->
     </v-container>
   </section>
 </template>
@@ -95,9 +95,10 @@ import Loader from '@/components/loader';
 import AppBar from '@/components/AppBar';
 import Banners from '@/components/HomeBanners';
 import LinkList from '@/components/LinkList';
+import ToolSearch from '~/components/toolSearch.vue';
 //import popup from '@/components/popup.vue';
-
 import axios from 'axios';
+
 export default {
   name: 'CSNetMainPage',
 
@@ -112,6 +113,7 @@ export default {
     Banners,
     LinkList,
     Loader,
+    ToolSearch,
   },
 
   data: () => ({
@@ -139,7 +141,7 @@ export default {
   }),
   methods: {
     //当日判定
-    areSameDate: function(d1, d2) {
+    areSameDate: function (d1, d2) {
       return (
         d1.getFullYear() == d2.getFullYear() &&
         d1.getMonth() == d2.getMonth() &&
@@ -147,32 +149,32 @@ export default {
       );
     },
     //HTMLタグ除去
-    delHTMLtag: function(str) {
+    delHTMLtag: function (str) {
       return str.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '');
     },
-    getAnnounceData: async function() {
-      await axios.get('http://lejnet/api/src/json/csnet/announce.json').then(res => {
+    getAnnounceData: async function () {
+      await axios.get('http://lejnet/api/src/json/csnet/announce.json').then((res) => {
         if (this.aryLen < res.data.list.length && this.aryLen !== 0) {
           //トップページのメッセージを定期更新。
           this.$store.dispatch('setAnnounceData', res.data);
-          console.log(this.$store.state.announce);
+          //console.log(this.$store.state.announce);
         }
         this.aryLen = res.data.list.length;
       });
     },
   },
   computed: {
-    announce: function() {
+    announce: function () {
       return this.$store.state.announce;
     },
-    importMsg: function() {
+    importMsg: function () {
       return this.$store.state.importMsg;
     },
   },
   mounted() {
     this.loading = true;
     //ユーザー情報取得
-    this.$store.dispatch('getUserData');
+    //this.$store.dispatch('getUserData');
     //全体周知メッセージ取得
     this.$store.dispatch('getAnnounceData');
     //定期的に最新データがないかチェック
@@ -202,7 +204,7 @@ export default {
       .then(
         axios.spread((goodComment, callForecast) => {
           //グッドコメント取得。当日の日付のレコードを取得。
-          let todaysComment = goodComment.data.find(val => {
+          let todaysComment = goodComment.data.find((val) => {
             let gcDate = new Date(val.GDdate);
             return this.areSameDate(gcDate, new Date());
           });
@@ -212,13 +214,13 @@ export default {
           this.GC.operator = this.delHTMLtag(todaysComment['csr_name']);
           this.GC.comment = this.delHTMLtag(todaysComment['comment']);
           // 入電予測
-          let callFcst = callForecast.data.find(val => {
+          let callFcst = callForecast.data.find((val) => {
             let fcstDate = new Date(val['ｄａｔｅ']); //全角　(；ﾟДﾟ)
             return this.areSameDate(fcstDate, new Date());
           });
           this.Fcst.today = callFcst['Fcst'];
           //昨日の入電結果
-          let yesterdayResult = callForecast.data.find(val => {
+          let yesterdayResult = callForecast.data.find((val) => {
             let fcstDate = new Date(val['ｄａｔｅ']); //全角　(；ﾟДﾟ)
             let yesterday = new Date();
             yesterday.setDate(yesterday.getDate() - 1);
@@ -239,7 +241,7 @@ export default {
             Math.round((yesterdayAbd / yesterdayActual) * 10000) / 100;
         })
       )
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       })
       .finally(() => {
@@ -271,7 +273,8 @@ export default {
 }
 
 .title-label {
-  color: #1976d2;
+  color: #000;
+  font-weight:bold;
   font-size: 1.5rem;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
   padding: 2px 1px;

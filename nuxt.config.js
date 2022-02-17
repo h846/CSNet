@@ -1,9 +1,9 @@
-import colors from 'vuetify/es5/util/colors'
+import colors from 'vuetify/es5/util/colors';
 
 export default {
   router: {
     //パスの設定。本番環境で動かすのに必要
-    base: process.env.NODE_ENV === 'development' ? '/' : '/CSNet/new/'
+    base: process.env.NODE_ENV === 'development' ? '/' : '/CSNet/new/',
   },
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
@@ -13,54 +13,65 @@ export default {
     titleTemplate: '%s - CS-Net',
     title: 'CS-Net',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'en',
     },
-    meta: [{
-        charset: 'utf-8'
+    meta: [
+      {
+        charset: 'utf-8',
       },
       {
         name: 'viewport',
-        content: 'width=device-width, initial-scale=1'
+        content: 'width=device-width, initial-scale=1',
       },
       {
         hid: 'description',
         name: 'description',
-        content: ''
-      }
+        content: '',
+      },
     ],
-    link: [{
-      rel: 'preconnect',
-      href: 'https://fonts.googleapis.com'
-    }],
-    link: [{
-      rel: 'preconnect',
-      href: 'https://fonts.gstatic.com'
-    }],
-    link: [{
-      rel: 'icon',
-      type: 'image/x-icon',
-      href: 'https://fonts.googleapis.com/css2?family=Kosugi&display=swap'
-    }],
-    link: [{
-      rel: 'icon',
-      type: 'image/x-icon',
-      href: 'http://lejnet/CSNet/new/favicon.ico'
-    }],
-    script: [{
-      src: '//polyfill.io/v2/polyfill.min.js'
-    }],
+    link: [
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.googleapis.com',
+      },
+    ],
+    link: [
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+      },
+    ],
+    link: [
+      {
+        rel: 'icon',
+        type: 'image/x-icon',
+        href: 'https://fonts.googleapis.com/css2?family=Kosugi&display=swap',
+      },
+    ],
+    link: [
+      {
+        rel: 'icon',
+        type: 'image/x-icon',
+        href: 'http://lejnet/CSNet/new/favicon.ico',
+      },
+    ],
+    script: [
+      {
+        src: '//polyfill.io/v2/polyfill.min.js',
+      },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-    '@/assets/main.scss'
-  ],
+  css: ['@/assets/main.scss'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [{
-    src: '~plugins/quill.js',
-    ssr: false
-  }],
+  plugins: [
+    {
+      src: '~plugins/quill.js',
+      ssr: false,
+    },
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -93,15 +104,14 @@ export default {
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
-          success: colors.green.accent3
-        }
-      }
-    }
+          success: colors.green.accent3,
+        },
+      },
+    },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     transpile: ['vuetify'],
-  }
-
-}
+  },
+};

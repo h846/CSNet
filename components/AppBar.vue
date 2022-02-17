@@ -10,7 +10,7 @@
         ユーザー設定
       </v-tab>
     </v-tabs>
-    <v-toolbar-title>{{ greeting }}</v-toolbar-title>
+    <!--<v-toolbar-title>{{ greeting }}</v-toolbar-title>-->
     <v-btn v-if="isAdmin" to="Admin" nuxt color="blue darken-4" outlined>ADMIN</v-btn>
   </v-app-bar>
 </template>
