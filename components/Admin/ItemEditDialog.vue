@@ -1,77 +1,62 @@
 <template>
   <v-dialog v-model="dialog" persistent width="500">
     <v-card>
-      <v-card-title>
-        リンクを編集します
-      </v-card-title>
+      <v-card-title> リンクを編集します </v-card-title>
       <v-card-text>
         <v-form>
-          <v-text-field
-            label="表示名"
-            :rules="[rules.required]"
-            v-model="dispName"
-            required
-          >
+          <v-text-field label="表示名" :rules="[rules.required]" v-model="dispName" required>
           </v-text-field>
-          <v-text-field
-            label="URL"
-            :rules="[rules.required, rules.nothta]"
-            v-model="url"
-            required
-          >
-          </v-text-field>
+          <v-text-field label="URL" v-model="url" required> </v-text-field>
         </v-form>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="primary" outlined @click="updateItem"> 更新 </v-btn>
-        <v-btn color="error" outlined @click="closeDialog()">
-          キャンセル
-        </v-btn>
+        <v-btn color="error" outlined @click="closeDialog()"> キャンセル </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 <script>
-import axios from "axios";
+import axios from 'axios';
 export default {
-  props: ["dialog", "link"],
+  props: ['dialog', 'link'],
   data() {
     return {
-      dispName: "",
-      url: "",
+      dispName: '',
+      url: '',
       rules: {
-        required: value => !!value || "何か入力してください",
-        nothta: value => {
+        required: (value) => !!value || '何か入力してください',
+        nothta: (value) => {
           const pattern = /(\.hta)$/;
-          return !pattern.test(value) || "htaは使用しないでください";
-        }
-      }
+          return !pattern.test(value) || 'htaは使用しないでください';
+        },
+      },
     };
   },
   created() {},
   watch: {
-    link: function(val) {
+    link: function (val) {
       this.dispName = val[0].Name;
       this.url = val[0].Link;
       console.log(val[0]);
-    }
+    },
   },
   methods: {
-    closeDialog: function() {
-      this.$emit("closeEditDialog");
+    closeDialog: function () {
+      this.$emit('closeEditDialog');
     },
     updateItem() {
       axios
-        .post("http://lejnet/API/accdb", {
+        .post('http://lejnet/API/accdb', {
           sql: `UPDATE tool SET Name = '${this.dispName}', Link = '${this.url}' WHERE ID = ${this.link[0].ID}`,
-          db: "CSNet/dataCenter/DB/Tool/tools_home.mdb"
+          db: 'CSNet/dataCenter/DB/Tool/tools_home.mdb',
         })
-        .then(res => {
-          console.log("DONE");
+        .then((res) => {
+          console.log('DONE');
         });
       this.closeDialog();
-      this.$emit("SuccessfulUpdate");
+      this.$emit('SuccessfulUpdate');
     },
     /*
     deleteItem: function() {
@@ -91,9 +76,9 @@ export default {
       }
       this.reset();
     },*/
-    reset: function() {
+    reset: function () {
       this.$router.go({ path: this.$router.currentRoute.path, force: true });
-    }
-  }
+    },
+  },
 };
 </script>

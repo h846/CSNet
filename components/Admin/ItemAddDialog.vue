@@ -39,19 +39,19 @@
   </v-dialog>
 </template>
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
-  props: ["dialog", "catid"],
+  props: ['dialog', 'catid'],
 
   data: function () {
     return {
       item: { id: null, name: null, url: null },
       error: {
         is_name: false,
-        msg_name: "",
+        msg_name: '',
         is_url: false,
-        msg_url: "",
+        msg_url: '',
       },
       dbdata: null,
       snackbar: false,
@@ -68,7 +68,7 @@ export default {
       this.item.name = null;
       this.item.url = null;
 
-      this.$emit("closeAddDialog");
+      this.$emit('closeAddDialog');
     },
     addItem: async function () {
       /*           *\
@@ -77,34 +77,34 @@ export default {
 
       // アイテム名、URLの非空欄確認
       if (!this.item.name) {
-        this.error.msg_name = "アイテム名を入力してください";
+        this.error.msg_name = 'アイテム名を入力してください';
         this.error.is_name = true;
         return;
       } else if (!this.item.url) {
-        this.error.msg_url = "URLを入力してください";
+        this.error.msg_url = 'URLを入力してください';
         this.error.is_url = true;
         return;
       }
       //url判定
       let regex = /^(https?:\/\/)/;
       if (!regex.test(this.item.url)) {
-        this.error.msg_url = "http(s)://から始まるURLを入力してください";
+        this.error.msg_url = 'http(s)://から始まるURLを入力してください';
         this.error.is_url = true;
         return;
-      } else {
+      } /* else {
         regex = /(\.hta)$/;
         if (regex.test(this.item.url)) {
           this.error.msg_url = "htaは指定できません。";
           this.error.is_url = true;
           return;
         }
-      }
+      }*/
       //Get data from DB
       await axios
-        .get("http://lejnet/API/accdb", {
+        .get('http://lejnet/API/accdb', {
           params: {
-            db: "CSNet/dataCenter/DB/Tool/tools_home.mdb",
-            table: "tool",
+            db: 'CSNet/dataCenter/DB/Tool/tools_home.mdb',
+            table: 'tool',
             date: new Date().getTime(),
           },
         })
@@ -112,7 +112,7 @@ export default {
           this.dbdata = res.data;
         })
         .catch((err) => {
-          return "error occured";
+          return 'error occured';
         });
       //すでに同じアイテム名が存在していないか確認
       var self = this;
@@ -140,8 +140,8 @@ export default {
       }
 
       await axios
-        .post("http://lejnet/API/accdb", {
-          db: "CSNet/dataCenter/DB/Tool/tools_home.mdb",
+        .post('http://lejnet/API/accdb', {
+          db: 'CSNet/dataCenter/DB/Tool/tools_home.mdb',
           sql: `INSERT INTO tool(ID, Name, Link, category) VALUES (${this.item.id}, '${this.item.name}', '${this.item.url}', ${this.catid});`,
         })
         .then((res) => {
