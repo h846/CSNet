@@ -44,7 +44,7 @@ import axios from 'axios';
 export default {
   props: ['dialog', 'catid'],
 
-  data: function () {
+  data: function() {
     return {
       item: { id: null, name: null, url: null },
       error: {
@@ -70,7 +70,7 @@ export default {
 
       this.$emit('closeAddDialog');
     },
-    addItem: async function () {
+    addItem: async function() {
       /*           *\
         VALIDATIONS  
       \*           */
@@ -108,19 +108,19 @@ export default {
             date: new Date().getTime(),
           },
         })
-        .then((res) => {
+        .then(res => {
           this.dbdata = res.data;
         })
-        .catch((err) => {
+        .catch(err => {
           return 'error occured';
         });
       //すでに同じアイテム名が存在していないか確認
       var self = this;
-      let isExistItem = this.dbdata.some(function (val) {
+      let isExistItem = this.dbdata.some(function(val) {
         return val.Name == self.item.name;
       });
       //すでに同じURLが存在していないか確認
-      let isExistUrl = this.dbdata.some(function (val) {
+      let isExistUrl = this.dbdata.some(function(val) {
         console.log(val.Link, self.item.url);
         return val.Link == self.item.url;
       });
@@ -133,10 +133,13 @@ export default {
         while (isExistID) {
           //4ケタのランダム値を生成
           self.item.id = this.randNum();
-          isExistID = this.dbdata.some(function (val) {
+          isExistID = this.dbdata.some(function(val) {
             return val.ID == self.item.id;
           });
         }
+      } else {
+        alert('すでにDBに登録されています。');
+        return;
       }
 
       await axios
@@ -144,21 +147,17 @@ export default {
           db: 'CSNet/dataCenter/DB/Tool/tools_home.mdb',
           sql: `INSERT INTO tool(ID, Name, Link, category) VALUES (${this.item.id}, '${this.item.name}', '${this.item.url}', ${this.catid});`,
         })
-        .then((res) => {
+        .then(res => {
           console.log(res.data);
+          this.snackbar = true;
+          this.$router.push('/');
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
         });
-
-      this.snackbar = true;
-      this.reset();
     },
-    randNum: function () {
+    randNum: function() {
       return Math.floor(Math.random() * 10000);
-    },
-    reset: function () {
-      this.$router.go({ path: this.$router.currentRoute.path, force: true });
     },
   },
 };

@@ -29,6 +29,7 @@
                   pill
                   link
                   href="http://lejnet/CSNet/home/month_good.html"
+                  target="_blank"
                 >
                   過去分</v-chip
                 ></v-card-title
@@ -81,10 +82,15 @@
           </v-sheet>
         </v-col>
       </v-row>
-      <!-- -->
+      <!-- Cente Banners-->
       <Banners />
-      <!-- Search Dialog -->
-      <ToolSearch />
+      <!-- Go to Search Tool -->
+      <v-row justify="center">
+        <v-btn color="warning" dark large class="mb-1" target="_blank" to="/toolSearch"
+          >ツール検索</v-btn
+        >
+      </v-row>
+
       <!-- Link List -->
       <LinkList />
     </v-container>
@@ -95,8 +101,7 @@ import Loader from '@/components/loader';
 import AppBar from '@/components/AppBar';
 import Banners from '@/components/HomeBanners';
 import LinkList from '@/components/LinkList';
-import ToolSearch from '~/components/toolSearch.vue';
-//import popup from '@/components/popup.vue';
+
 import axios from 'axios';
 
 export default {
@@ -113,7 +118,6 @@ export default {
     Banners,
     LinkList,
     Loader,
-    ToolSearch,
   },
 
   data: () => ({
@@ -141,7 +145,7 @@ export default {
   }),
   methods: {
     //当日判定
-    areSameDate: function (d1, d2) {
+    areSameDate: function(d1, d2) {
       return (
         d1.getFullYear() == d2.getFullYear() &&
         d1.getMonth() == d2.getMonth() &&
@@ -149,11 +153,11 @@ export default {
       );
     },
     //HTMLタグ除去
-    delHTMLtag: function (str) {
+    delHTMLtag: function(str) {
       return str.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '');
     },
-    getAnnounceData: async function () {
-      await axios.get('http://lejnet/api/src/json/csnet/announce.json').then((res) => {
+    getAnnounceData: async function() {
+      await axios.get('http://lejnet/api/src/json/csnet/announce.json').then(res => {
         if (this.aryLen < res.data.list.length && this.aryLen !== 0) {
           //トップページのメッセージを定期更新。
           this.$store.dispatch('setAnnounceData', res.data);
@@ -164,10 +168,10 @@ export default {
     },
   },
   computed: {
-    announce: function () {
+    announce: function() {
       return this.$store.state.announce;
     },
-    importMsg: function () {
+    importMsg: function() {
       return this.$store.state.importMsg;
     },
   },
@@ -204,7 +208,7 @@ export default {
       .then(
         axios.spread((goodComment, callForecast) => {
           //グッドコメント取得。当日の日付のレコードを取得。
-          let todaysComment = goodComment.data.find((val) => {
+          let todaysComment = goodComment.data.find(val => {
             let gcDate = new Date(val.GDdate);
             return this.areSameDate(gcDate, new Date());
           });
@@ -214,13 +218,13 @@ export default {
           this.GC.operator = this.delHTMLtag(todaysComment['csr_name']);
           this.GC.comment = this.delHTMLtag(todaysComment['comment']);
           // 入電予測
-          let callFcst = callForecast.data.find((val) => {
+          let callFcst = callForecast.data.find(val => {
             let fcstDate = new Date(val['ｄａｔｅ']); //全角　(；ﾟДﾟ)
             return this.areSameDate(fcstDate, new Date());
           });
           this.Fcst.today = callFcst['Fcst'];
           //昨日の入電結果
-          let yesterdayResult = callForecast.data.find((val) => {
+          let yesterdayResult = callForecast.data.find(val => {
             let fcstDate = new Date(val['ｄａｔｅ']); //全角　(；ﾟДﾟ)
             let yesterday = new Date();
             yesterday.setDate(yesterday.getDate() - 1);
@@ -241,7 +245,7 @@ export default {
             Math.round((yesterdayAbd / yesterdayActual) * 10000) / 100;
         })
       )
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       })
       .finally(() => {

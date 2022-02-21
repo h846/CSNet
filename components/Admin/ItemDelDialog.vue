@@ -17,32 +17,29 @@
   </v-dialog>
 </template>
 <script>
-import axios from "axios";
+import axios from 'axios';
 export default {
-  props: ["dialog", "checkedItems"],
+  props: ['dialog', 'checkedItems'],
   methods: {
-    closeDialog: function () {
-      this.$emit("closeDelDialog");
+    closeDialog: function() {
+      this.$emit('closeDelDialog');
     },
-    deleteItem: function () {
+    deleteItem: function() {
       for (let id of this.checkedItems) {
         let data = {
           sql: `DELETE FROM tool WHERE ID=${id}`,
-          db: "CSNet/dataCenter/DB/Tool/tools_home.mdb",
+          db: 'CSNet/dataCenter/DB/Tool/tools_home.mdb',
         };
         axios
-          .post("http://lejnet/API/accdb", data)
-          .then((res) => {
-            console.log(res.data, "success");
+          .post('http://lejnet/API/accdb', data)
+          .then(res => {
+            console.log(res.data, 'success');
+            this.$router.push('/');
           })
-          .catch((err) => {
+          .catch(err => {
             console.log(err);
           });
       }
-      this.reset();
-    },
-    reset: function () {
-      this.$router.go({ path: this.$router.currentRoute.path, force: true });
     },
   },
 };

@@ -26,24 +26,20 @@ export default {
       dispName: '',
       url: '',
       rules: {
-        required: (value) => !!value || '何か入力してください',
-        nothta: (value) => {
-          const pattern = /(\.hta)$/;
-          return !pattern.test(value) || 'htaは使用しないでください';
-        },
+        required: value => !!value || '何か入力してください',
       },
     };
   },
   created() {},
   watch: {
-    link: function (val) {
+    link: function(val) {
       this.dispName = val[0].Name;
       this.url = val[0].Link;
       console.log(val[0]);
     },
   },
   methods: {
-    closeDialog: function () {
+    closeDialog: function() {
       this.$emit('closeEditDialog');
     },
     updateItem() {
@@ -52,32 +48,11 @@ export default {
           sql: `UPDATE tool SET Name = '${this.dispName}', Link = '${this.url}' WHERE ID = ${this.link[0].ID}`,
           db: 'CSNet/dataCenter/DB/Tool/tools_home.mdb',
         })
-        .then((res) => {
+        .then(res => {
           console.log('DONE');
+          this.closeDialog();
+          this.$emit('SuccessfulUpdate');
         });
-      this.closeDialog();
-      this.$emit('SuccessfulUpdate');
-    },
-    /*
-    deleteItem: function() {
-      for (let id of this.checkedItems) {
-        let data = {
-          sql: `DELETE FROM tool WHERE ID=${id}`,
-          db: "CSNet/dataCenter/DB/Tool/tools_home.mdb"
-        };
-        axios
-          .post("http://lejnet/API/accdb", data)
-          .then(res => {
-            console.log(res.data, "success");
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      }
-      this.reset();
-    },*/
-    reset: function () {
-      this.$router.go({ path: this.$router.currentRoute.path, force: true });
     },
   },
 };

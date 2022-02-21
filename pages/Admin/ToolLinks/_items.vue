@@ -5,11 +5,7 @@
       <h1 class="ma-6 pt-3">{{ $route.params.items }}</h1>
       <v-row class="ml-3" align="center">
         <v-col cols="6">
-          <v-btn
-            :disabled="btnDisable"
-            @click.stop="delDialog = true"
-            color="error"
-          >
+          <v-btn :disabled="btnDisable" @click.stop="delDialog = true" color="error">
             <v-icon left>mdi-trash-can-outline</v-icon>
             チェックした項目を削除
           </v-btn>
@@ -34,6 +30,7 @@
                   :value="item.ID"
                   dense
                   hide-details
+                  style="font-weight: bold;"
                 ></v-checkbox>
               </v-list-item-content>
               <v-btn :href="item.Link" target="_blank" color="primary" text>
@@ -58,11 +55,7 @@
       @closeDelDialog="delDialog = false"
     />
     <!-- Add Dialog-->
-    <itemAddDialog
-      :dialog="addDialog"
-      :catid="catid"
-      @closeAddDialog="addDialog = false"
-    />
+    <itemAddDialog :dialog="addDialog" :catid="catid" @closeAddDialog="addDialog = false" />
     <!-- Edit Dialog-->
     <itemEditDialog
       :dialog="editDialog"
@@ -76,13 +69,13 @@
   </v-container>
 </template>
 <script>
-import Loader from "@/components/loader";
-import itemAddDialog from "@/components/Admin/ItemAddDialog";
-import itemDelDialog from "@/components/Admin/ItemDelDialog";
-import itemEditDialog from "@/components/Admin/ItemEditDialog";
+import Loader from '@/components/loader';
+import itemAddDialog from '@/components/Admin/ItemAddDialog';
+import itemDelDialog from '@/components/Admin/ItemDelDialog';
+import itemEditDialog from '@/components/Admin/ItemEditDialog';
 
-import axios from "axios";
-import draggable from "vuedraggable";
+import axios from 'axios';
+import draggable from 'vuedraggable';
 
 export default {
   components: {
@@ -90,7 +83,7 @@ export default {
     itemDelDialog,
     itemEditDialog,
     Loader,
-    draggable
+    draggable,
   },
   data() {
     return {
@@ -102,8 +95,8 @@ export default {
       addDialog: false,
       editDialog: false,
       edSnackbar: false,
-      link: [{ Name: "none" }],
-      loading: true
+      link: [{ Name: 'none' }],
+      loading: true,
     };
   },
   created() {
@@ -116,17 +109,17 @@ export default {
       } else {
         this.btnDisable = false;
       }
-    }
+    },
   },
   methods: {
     async getItemData() {
       await axios
-        .get("http://lejnet/API/accdb/", {
+        .get('http://lejnet/API/accdb/', {
           params: {
-            db: "CSNet/dataCenter/DB/Tool/tools_home.mdb",
-            table: "tool",
-            date: new Date().getTime()
-          }
+            db: 'CSNet/dataCenter/DB/Tool/tools_home.mdb',
+            table: 'tool',
+            date: new Date().getTime(),
+          },
         })
         .then(res => {
           // Sorting
@@ -162,13 +155,13 @@ export default {
 
       for (const index in this.data) {
         let [position, id] = [this.data[index].position, this.data[index].ID];
-        axios.post("http://lejnet/API/accdb", {
-          db: "CSNet/dataCenter/DB/Tool/tools_home.mdb",
-          sql: `UPDATE \`tool\` SET \`position\` = ${position} WHERE \`ID\` = ${id}`
+        axios.post('http://lejnet/API/accdb', {
+          db: 'CSNet/dataCenter/DB/Tool/tools_home.mdb',
+          sql: `UPDATE \`tool\` SET \`position\` = ${position} WHERE \`ID\` = ${id}`,
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="stylus" scoped>

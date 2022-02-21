@@ -1,9 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-dialog v-model="dialog" max-width="600">
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn v-bind="attrs" v-on="on"> キーワード検索 </v-btn>
-      </template>
+    <v-col cols="12">
       <v-card>
         <v-card-title class="text-h5"> 検索キーワードを入力してください </v-card-title>
         <v-card-text>
@@ -24,7 +21,7 @@
               <v-list-item v-for="(i, k) in itemList" :key="k">
                 <v-list-item-content v-show="showList">
                   <v-list-item-title>
-                    <a :href="i.Link">{{ i.Name }}</a>
+                    <a :href="i.Link" target="_blank">{{ i.Name }}</a>
                   </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
@@ -32,7 +29,7 @@
           </v-container>
         </v-card-text>
       </v-card>
-    </v-dialog>
+    </v-col>
   </v-row>
 </template>
 <script>
@@ -46,16 +43,15 @@ export default {
       searchWord: null,
     };
   },
-  mounted: function () {
+  mounted: function() {
     this.$store.dispatch('getLinkListItems').then(() => {
       this.itemList = this.orgList = this.$store.state.LinkListItems;
-      //console.log('itemlist is' + this.itemList);
     });
   },
   methods: {
-    search: function () {
+    search: function() {
       this.showList = true;
-      this.itemList = this.orgList.filter((val) => {
+      this.itemList = this.orgList.filter(val => {
         return val.Name.includes(this.searchWord);
       });
     },
