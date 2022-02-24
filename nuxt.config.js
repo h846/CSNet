@@ -3,7 +3,7 @@ import colors from 'vuetify/es5/util/colors';
 export default {
   router: {
     //パスの設定。本番環境で動かすのに必要
-    base: process.env.NODE_ENV === 'development' ? '/' : '/CSNet/new/',
+    base: process.env.NODE_ENV === 'development' ? '/' : '/CSNet/test/home',
   },
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
@@ -112,6 +112,12 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    parallel: true,
+    cache: true,
+    hardSource: true,
     transpile: ['vuetify'],
+    babel: {
+      compact: true,
+    },
   },
 };

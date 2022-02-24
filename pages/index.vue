@@ -34,16 +34,16 @@
                   過去分</v-chip
                 ></v-card-title
               >
-              <!-- CSR Info -->
+
               <v-card-subtitle class="csr_info">
-                <p class="gc-source">{{ GC.source }}</p>
+                <p class="gc-source">{{ goodComment['出所'] }}</p>
                 <div class="amber--text text--darken-4">
-                  <span class="mr-2">{{ GC.dept }}</span>
-                  <span>{{ GC.operator }}</span>
+                  <span class="mr-2">{{ goodComment['dept'] }}</span>
+                  <span>{{ goodComment['csr_name'] }}</span>
                 </div>
               </v-card-subtitle>
               <!-- Comment -->
-              <v-card-text class="font-weight-black">{{ GC.comment }}</v-card-text>
+              <v-card-text class="font-weight-black">{{ goodComment['comment'] }}</v-card-text>
             </v-card>
             <!-- Call Forecast -->
             <v-card class="mt-5">
@@ -51,7 +51,7 @@
                 <span class="title-label">本日の入電予測</span>
               </v-card-title>
               <v-card-text class="ml-4 pa-0">
-                <span class="fcst-today">{{ Fcst.today }}本</span>
+                <span class="fcst-today">{{ callForecast.today['Fcst'] }}本</span>
               </v-card-text>
               <v-card-title>
                 <span class="title-label">昨日の入電結果</span>
@@ -60,21 +60,21 @@
                 <v-col cols="12" sm="6" class="pa-0">
                   <div class="ml-8 mb-3">
                     <p class="ma-0">入電数</p>
-                    <span class="font-weight-bold">{{ Fcst.yesterday.actual }}本 </span>
-                    <span>(予測の{{ Fcst.yesterday.FcstRate }}%)</span>
+                    <span class="font-weight-bold">{{ callForecast.yesterday['actual'] }}本 </span>
+                    <span>(予測の{{ forecastRate }}%)</span>
                   </div>
                 </v-col>
                 <v-col cols="12" sm="6" class="pa-0">
                   <div class="ml-8 mb-3">
                     <p class="ma-0">放棄数</p>
-                    <span class="font-weight-bold">{{ Fcst.yesterday.abd }}本</span>
-                    <span>(入電の{{ Fcst.yesterday.AbdRate }}%)</span>
+                    <span class="font-weight-bold">{{ callForecast.yesterday.abd }}本</span>
+                    <span>(入電の{{ abandanRate }}%)</span>
                   </div>
                 </v-col>
                 <v-col cols="12" sm="6" class="pa-0">
                   <div class="ml-8 mb-3">
                     <p class="ma-0">着信できなかった本数</p>
-                    <span class="font-weight-bold">{{ Fcst.yesterday['裏abd'] }}本</span>
+                    <span class="font-weight-bold">{{ callForecast.yesterday['裏abd'] }}本</span>
                   </div>
                 </v-col>
               </v-row>
@@ -90,7 +90,6 @@
           >ツール検索</v-btn
         >
       </v-row>
-
       <!-- Link List -->
       <LinkList />
     </v-container>
@@ -119,138 +118,119 @@ export default {
     LinkList,
     Loader,
   },
-
-  data: () => ({
-    loading: false,
-    isAdmin: false,
-    aryLen: 0, //Announce Data array
-    //Good Comment
-    GC: {
-      source: '',
-      dept: '',
-      operator: '',
-      comment: '',
-    },
-    Fcst: {
-      today: '',
-      yesterday: {
-        Fcst: 0,
-        actual: 0,
-        abd: 0,
-        裏abd: 0,
-        FcstRate: null,
-        AbdRate: null,
-      },
-    },
-  }),
-  methods: {
-    //当日判定
-    areSameDate: function(d1, d2) {
+  // Fetch: コンポーネントが作成される前に実行される
+  async fetch({ store, params }) {
+    //同日判定
+    function areSameDate(d1, d2) {
       return (
         d1.getFullYear() == d2.getFullYear() &&
         d1.getMonth() == d2.getMonth() &&
         d1.getDate() == d2.getDate()
       );
-    },
+    }
     //HTMLタグ除去
-    delHTMLtag: function(str) {
-      return str.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '');
-    },
-    getAnnounceData: async function() {
-      await axios.get('http://lejnet/api/src/json/csnet/announce.json').then(res => {
-        if (this.aryLen < res.data.list.length && this.aryLen !== 0) {
-          //トップページのメッセージを定期更新。
-          this.$store.dispatch('setAnnounceData', res.data);
-          //console.log(this.$store.state.announce);
-        }
-        this.aryLen = res.data.list.length;
-      });
+    function delHTMLtag(str) {
+      return String(str).replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '');
+    }
+    //Good Comment Data
+    let gcData = await axios.get('http://lejnet/API/accdb', {
+      params: {
+        db: 'CSNet/common/HotVoice/data/DB/data.mdb',
+        table: 'good_comment_csnethome',
+      },
+    });
+    let gcDataToday = gcData.data.find((val) => {
+      let gcDate = new Date(val.GDdate);
+      return areSameDate(gcDate, new Date());
+    });
+
+    for (const key in gcDataToday) {
+      gcDataToday[key] = delHTMLtag(gcDataToday[key]);
+    }
+    store.commit('setGoodComment', gcDataToday);
+
+    //Call Forecast Data
+    let cfData = await axios.get('http://lejnet/API/accdb', {
+      params: {
+        db: 'CSNet/dataCenter/DB/Fcst/call/call_Result.accdb',
+        table: 'data',
+      },
+    });
+
+    let today = cfData.data.find((val) => {
+      let cfDate = new Date(val['ｄａｔｅ']); //全角(；´Д｀)
+      return areSameDate(cfDate, new Date());
+    });
+    for (const key in today) {
+      today[key] = delHTMLtag(today[key]);
+    }
+
+    let yesterday = cfData.data.find((val) => {
+      let cfDate = new Date(val['ｄａｔｅ']); //全角(；´Д｀)
+      let yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      return areSameDate(cfDate, yesterday);
+    });
+
+    for (const key in yesterday) {
+      yesterday[key] = delHTMLtag(yesterday[key]);
+    }
+
+    store.commit('setCallForecast', { today: today, yesterday: yesterday });
+  },
+
+  data: () => ({
+    loading: false,
+    isAdmin: false,
+    aryLen: 0, //Announce Data array
+  }),
+  methods: {
+    //トップページのメッセージを定期更新。
+    getAnnounceData: async function () {
+      let res = await axios.get('http://lejnet/api/src/json/csnet/announce.json');
+      if (this.aryLen < res.data.list.length && this.aryLen !== 0) {
+        this.$store.dispatch('setAnnounceData', res.data);
+        //console.log(this.$store.state.announce);
+      }
+      this.aryLen = res.data.list.length;
     },
   },
   computed: {
-    announce: function() {
+    announce: function () {
       return this.$store.state.announce;
     },
-    importMsg: function() {
+    importMsg: function () {
       return this.$store.state.importMsg;
+    },
+    goodComment: function () {
+      return this.$store.state.goodComment;
+    },
+    callForecast: function () {
+      return this.$store.state.callForecast;
+    },
+    forecastRate: function () {
+      let fcst = parseInt(this.callForecast.yesterday.Fcst);
+      let actual = parseInt(this.callForecast.yesterday.actual);
+      return Math.round((fcst / actual) * 100);
+    },
+    abandanRate: function () {
+      let abd = parseInt(this.callForecast.yesterday.abd);
+      let actual = parseInt(this.callForecast.yesterday.actual);
+      return Math.round((abd / actual) * 10000) / 100;
     },
   },
   mounted() {
-    this.loading = true;
+    //this.loading = true;
     //ユーザー情報取得
     //this.$store.dispatch('getUserData');
     //全体周知メッセージ取得
     this.$store.dispatch('getAnnounceData');
+    // 重要メッセージ取得
+    this.$store.dispatch('getImportMsgData');
     //定期的に最新データがないかチェック
     setInterval(async () => {
       await this.getAnnounceData();
     }, 1000);
-    // 重要メッセージ取得
-    this.$store.dispatch('getImportMsgData');
-    //情報取得
-    axios
-      .all([
-        //グッドコメント
-        axios.get('http://lejnet/API/accdb', {
-          params: {
-            db: 'CSNet/common/HotVoice/data/DB/data.mdb',
-            table: 'good_comment_csnethome',
-          },
-        }),
-        //入電予測
-        axios.get('http://lejnet/API/accdb', {
-          params: {
-            db: 'CSNet/dataCenter/DB/Fcst/call/call_Result.accdb',
-            table: 'data',
-          },
-        }),
-      ])
-      .then(
-        axios.spread((goodComment, callForecast) => {
-          //グッドコメント取得。当日の日付のレコードを取得。
-          let todaysComment = goodComment.data.find(val => {
-            let gcDate = new Date(val.GDdate);
-            return this.areSameDate(gcDate, new Date());
-          });
-          //htmlタグを除去して割り当て
-          this.GC.source = this.delHTMLtag(todaysComment['出所']);
-          this.GC.dept = this.delHTMLtag(todaysComment['部署']);
-          this.GC.operator = this.delHTMLtag(todaysComment['csr_name']);
-          this.GC.comment = this.delHTMLtag(todaysComment['comment']);
-          // 入電予測
-          let callFcst = callForecast.data.find(val => {
-            let fcstDate = new Date(val['ｄａｔｅ']); //全角　(；ﾟДﾟ)
-            return this.areSameDate(fcstDate, new Date());
-          });
-          this.Fcst.today = callFcst['Fcst'];
-          //昨日の入電結果
-          let yesterdayResult = callForecast.data.find(val => {
-            let fcstDate = new Date(val['ｄａｔｅ']); //全角　(；ﾟДﾟ)
-            let yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-
-            return this.areSameDate(fcstDate, yesterday);
-          });
-          this.Fcst.yesterday['Fcst'] = yesterdayResult['Fcst'];
-          this.Fcst.yesterday['actual'] = yesterdayResult['actual'];
-          this.Fcst.yesterday['abd'] = yesterdayResult['abd'];
-          this.Fcst.yesterday['裏abd'] = yesterdayResult['裏abd'];
-          //予測/実績 入電比率
-          let yesterdayFcst = parseInt(this.Fcst.yesterday['Fcst']);
-          let yesterdayActual = parseInt(this.Fcst.yesterday['actual']);
-          let yesterdayAbd = parseInt(this.Fcst.yesterday['abd']);
-          this.Fcst.yesterday['FcstRate'] = Math.round((yesterdayActual / yesterdayFcst) * 100);
-          //放棄率
-          this.Fcst.yesterday['AbdRate'] =
-            Math.round((yesterdayAbd / yesterdayActual) * 10000) / 100;
-        })
-      )
-      .catch(error => {
-        console.log(error);
-      })
-      .finally(() => {
-        this.loading = false;
-      });
   },
 };
 </script>

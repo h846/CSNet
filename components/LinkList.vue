@@ -67,7 +67,7 @@ ul,li{
 }
 a {
   text-decoration: none;
-  color:#000;
+  color:#000 !important;
   font-weight: bold;
 }
 

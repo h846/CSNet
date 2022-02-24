@@ -3,6 +3,8 @@ import axios from 'axios';
 export const state = () => ({
   announce: null,
   importMsg: null,
+  goodComment: null,
+  callForecast: null,
   LinkListCategory: null,
   LinkListItems: [],
   userData: {
@@ -34,11 +36,13 @@ export const state = () => ({
 });
 
 export const getters = {
-  llc: function (state) {
-    return state.LinkListCategory;
+  getGC: function (state) {
+    return state.goodComment;
   },
 };
-
+/*
+  Mutations
+*/
 export const mutations = {
   setUserData: function (state, data) {
     state.userData.id = data.id;
@@ -50,6 +54,12 @@ export const mutations = {
     //リストの先頭にある最新のデータを取得
     state.announce = announce.list[0].data;
     //console.log(announce.list[0].data);
+  },
+  setGoodComment: function (state, data) {
+    state.goodComment = data;
+  },
+  setCallForecast: function (state, data) {
+    state.callForecast = data;
   },
   setImportMsg: function (state, data) {
     state.importMsg = data.list[0].data;
@@ -64,7 +74,9 @@ export const mutations = {
     state.LinkListItems = data;
   },
 };
-
+/*
+  Actions
+*/
 export const actions = {
   getUserData: async function ({ commit }) {
     let res = await axios.get('http://lejnet/API/src/user/');
