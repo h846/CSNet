@@ -113,7 +113,31 @@ export const actions = {
         console.log(err);
       });
   },
-  getLinkListCategory: function ({ commit }) {
+  fetchGoodComment: async function ({ commit }) {
+    await axios
+      .get('http://lejnet/API/accdb', {
+        params: {
+          db: 'CSNet/common/HotVoice/data/DB/data.mdb',
+          table: 'good_comment_csnethome',
+        },
+      })
+      .then((res) => {
+        commit('setGoodComment', res.data);
+      });
+  },
+  fetchCallForecast: async function ({ commit }) {
+    await axios
+      .get('http://lejnet/API/accdb', {
+        params: {
+          db: 'CSNet/dataCenter/DB/Fcst/call/call_Result.accdb',
+          table: 'data',
+        },
+      })
+      .then((res) => {
+        commit('setCallForecast', res.data);
+      });
+  },
+  getLinkListCategory: async function ({ commit }) {
     return axios
       .get('http://lejnet/API/accdb', {
         params: {

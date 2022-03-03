@@ -42,16 +42,18 @@
                   <span>{{ goodComment['csr_name'] }}</span>
                 </div>
               </v-card-subtitle>
-              <!-- Comment -->
-              <v-card-text class="font-weight-black">{{ goodComment['comment'] }}</v-card-text>
+              <!-- Comment-->
+              <v-card-text class="font-weight-black">{{ goodComment.comment }}</v-card-text>
             </v-card>
+
             <!-- Call Forecast -->
+
             <v-card class="mt-5">
               <v-card-title class="">
                 <span class="title-label">本日の入電予測</span>
               </v-card-title>
               <v-card-text class="ml-4 pa-0">
-                <span class="fcst-today">{{ callForecast.today['Fcst'] }}本</span>
+                <span class="fcst-today">{{ callForecast.today.Fcst }}本</span>
               </v-card-text>
               <v-card-title>
                 <span class="title-label">昨日の入電結果</span>
@@ -67,7 +69,7 @@
                 <v-col cols="12" sm="6" class="pa-0">
                   <div class="ml-8 mb-3">
                     <p class="ma-0">放棄数</p>
-                    <span class="font-weight-bold">{{ callForecast.yesterday.abd }}本</span>
+                    <span class="font-weight-bold">{{ callForecast.yesterday['abd'] }}本</span>
                     <span>(入電の{{ abandanRate }}%)</span>
                   </div>
                 </v-col>
@@ -82,7 +84,7 @@
           </v-sheet>
         </v-col>
       </v-row>
-      <!-- Cente Banners-->
+      <!-- Center Banners-->
       <Banners />
       <!-- Go to Search Tool -->
       <v-row justify="center">
@@ -118,105 +120,42 @@ export default {
     LinkList,
     Loader,
   },
-  // Fetch: コンポーネントが作成される前に実行される
-  async fetch({ store, params }) {
+  data: () => ({
+    loading: false,
+    isAdmin: false,
+    aryLen: 0, //Announce Data array
+    announce: null,
+    importMsg: null,
+    goodComment: {},
+    callForecast: {
+      today: {},
+      yesterday: {},
+    },
+    forecastRate: null,
+    abandanRate: null,
+  }),
+  computed: {},
+
+  methods: {
+    //トップページのメッセージを定期更新。
+    getAnnounceData: async function () {
+      let res = await axios.get('http://lejnet/api/src/json/csnet/announce.json');
+      if (this.aryLen < res.data.list.length) {
+        this.$store.dispatch('setAnnounceData', res.data);
+      }
+      this.aryLen = res.data.list.length;
+    },
     //同日判定
-    function areSameDate(d1, d2) {
+    areSameDate(d1, d2) {
       return (
         d1.getFullYear() == d2.getFullYear() &&
         d1.getMonth() == d2.getMonth() &&
         d1.getDate() == d2.getDate()
       );
-    }
+    },
     //HTMLタグ除去
-    function delHTMLtag(str) {
+    delHTMLtag(str) {
       return String(str).replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '');
-    }
-    //Good Comment Data
-    let gcData = await axios.get('http://lejnet/API/accdb', {
-      params: {
-        db: 'CSNet/common/HotVoice/data/DB/data.mdb',
-        table: 'good_comment_csnethome',
-      },
-    });
-    let gcDataToday = gcData.data.find((val) => {
-      let gcDate = new Date(val.GDdate);
-      return areSameDate(gcDate, new Date());
-    });
-
-    for (const key in gcDataToday) {
-      gcDataToday[key] = delHTMLtag(gcDataToday[key]);
-    }
-    store.commit('setGoodComment', gcDataToday);
-
-    //Call Forecast Data
-    let cfData = await axios.get('http://lejnet/API/accdb', {
-      params: {
-        db: 'CSNet/dataCenter/DB/Fcst/call/call_Result.accdb',
-        table: 'data',
-      },
-    });
-
-    let today = cfData.data.find((val) => {
-      let cfDate = new Date(val['ｄａｔｅ']); //全角(；´Д｀)
-      return areSameDate(cfDate, new Date());
-    });
-    for (const key in today) {
-      today[key] = delHTMLtag(today[key]);
-    }
-
-    let yesterday = cfData.data.find((val) => {
-      let cfDate = new Date(val['ｄａｔｅ']); //全角(；´Д｀)
-      let yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      return areSameDate(cfDate, yesterday);
-    });
-
-    for (const key in yesterday) {
-      yesterday[key] = delHTMLtag(yesterday[key]);
-    }
-
-    store.commit('setCallForecast', { today: today, yesterday: yesterday });
-  },
-
-  data: () => ({
-    loading: false,
-    isAdmin: false,
-    aryLen: 0, //Announce Data array
-  }),
-  methods: {
-    //トップページのメッセージを定期更新。
-    getAnnounceData: async function () {
-      let res = await axios.get('http://lejnet/api/src/json/csnet/announce.json');
-      if (this.aryLen < res.data.list.length && this.aryLen !== 0) {
-        this.$store.dispatch('setAnnounceData', res.data);
-        //console.log(this.$store.state.announce);
-      }
-      this.aryLen = res.data.list.length;
-    },
-  },
-  computed: {
-    announce: function () {
-      return this.$store.state.announce;
-    },
-    importMsg: function () {
-      return this.$store.state.importMsg;
-    },
-    goodComment: function () {
-      return this.$store.state.goodComment;
-    },
-    callForecast: function () {
-      return this.$store.state.callForecast;
-    },
-    forecastRate: function () {
-      let fcst = parseInt(this.callForecast.yesterday.Fcst);
-      let actual = parseInt(this.callForecast.yesterday.actual);
-      return Math.round((fcst / actual) * 100);
-    },
-    abandanRate: function () {
-      let abd = parseInt(this.callForecast.yesterday.abd);
-      let actual = parseInt(this.callForecast.yesterday.actual);
-      return Math.round((abd / actual) * 10000) / 100;
     },
   },
   mounted() {
@@ -224,13 +163,60 @@ export default {
     //ユーザー情報取得
     //this.$store.dispatch('getUserData');
     //全体周知メッセージ取得
-    this.$store.dispatch('getAnnounceData');
-    // 重要メッセージ取得
-    this.$store.dispatch('getImportMsgData');
+    this.$store.dispatch('getAnnounceData').then(() => {
+      this.announce = this.$store.state.announce;
+    });
     //定期的に最新データがないかチェック
     setInterval(async () => {
       await this.getAnnounceData();
     }, 1000);
+    // 重要メッセージ取得
+    this.$store.dispatch('getImportMsgData').then(() => {
+      this.importMsg = this.$store.state.importMsg;
+    });
+    //グッドコメント
+    this.$store.dispatch('fetchGoodComment').then(() => {
+      let gcData = JSON.parse(JSON.stringify(this.$store.state.goodComment));
+      let gcDataToday = gcData.find((val) => {
+        let gcDate = new Date(val.GDdate);
+        return this.areSameDate(gcDate, new Date());
+      });
+
+      for (const key in gcDataToday) {
+        gcDataToday[key] = this.delHTMLtag(gcDataToday[key]);
+      }
+
+      this.goodComment = gcDataToday;
+    });
+    //Call Forecast
+    this.$store.dispatch('fetchCallForecast').then(() => {
+      let cfData = JSON.parse(JSON.stringify(this.$store.state.callForecast));
+      let today = cfData.find((val) => {
+        let cfDate = new Date(val['ｄａｔｅ']); //全角(；´Д｀)
+        return this.areSameDate(cfDate, new Date());
+      });
+      for (const key in today) {
+        today[key] = this.delHTMLtag(today[key]);
+      }
+
+      let yesterday = cfData.find((val) => {
+        let cfDate = new Date(val['ｄａｔｅ']); //全角(；´Д｀)
+        let yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        return this.areSameDate(cfDate, yesterday);
+      });
+      for (const key in yesterday) {
+        yesterday[key] = this.delHTMLtag(yesterday[key]);
+      }
+
+      this.callForecast.today = today;
+      this.callForecast.yesterday = yesterday;
+      let fcst = parseInt(yesterday.Fcst);
+      let actual = parseInt(yesterday.actual);
+      let abd = parseInt(yesterday.abd);
+      this.forecastRate = Math.round((actual / fcst) * 100);
+      this.abandanRate = Math.round((abd / actual) * 10000) / 100;
+    });
   },
 };
 </script>
